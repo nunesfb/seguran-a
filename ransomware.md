@@ -72,9 +72,7 @@
 
 ## 🧪 Demos
 
-> Objetivo: **ilustrar conceitos** (bloqueio, criptografia, resposta e detecção) **sem** tocar em arquivos do sistema ou automatizar comportamentos maliciosos.
-
-### 1) “Locker” didático (bloqueio de tela **falso**)
+### 1) “Locker” (bloqueio de tela **falso**)
 *Simula um bloqueio com mensagem de “resgate”; um código conhecido ‘desbloqueia’.*  
 Salve como `locker_demo.html` e abra no navegador.
 
@@ -157,11 +155,11 @@ if __name__ == "__main__":
     print("\n>>> DECIFRADO:\n", decifrar(pacote, senha))
 ```
 
-Pontos didáticos: senha → chave (PBKDF2 + sal), nonce único e AEAD (confidencialidade + integridade).
+Pontos: senha → chave (PBKDF2 + sal), nonce único e AEAD (confidencialidade + integridade).
 
 ---
 
-### 3) “Backup & Restore” didático (sem código malicioso)
+### 3) “Backup & Restore” didático
 Demonstra o efeito de “dados inacessíveis sem senha” com ferramenta legítima.
 
 **Criar pasta e arquivo (Windows PowerShell / macOS/Linux):**
