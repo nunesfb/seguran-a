@@ -1,4 +1,4 @@
-# 🔹 Ransomware — Visão Didática
+# 🔹 Ransomware
 
 ## 📌 Definição
 **Ransomware** é um tipo de malware de **extorsão** que **sequestra dados** por criptografia e exige **pagamento de resgate** (geralmente em criptomoedas) para suposta recuperação.
@@ -70,7 +70,7 @@
 
 ---
 
-## 🧪 Demos 100% Seguras para Sala (Sem Malware)
+## 🧪 Demos
 
 > Objetivo: **ilustrar conceitos** (bloqueio, criptografia, resposta e detecção) **sem** tocar em arquivos do sistema ou automatizar comportamentos maliciosos.
 
@@ -207,9 +207,3 @@ Mensagem: ferramentas de defesa buscam padrões de explosão de I/O e criação 
 
 ---
 
-## 🗺️ Roteiro sugerido (20–25 min)
-- Definição + cadeia (5 min).  
-- Locker didático (3–5 min).  
-- Cripto em memória (5–7 min) — conceitos de chave/sal/nonce.  
-- Backup & restore (5 min).  
-- Detecção com log sintético (3–5 min) → discussão de IoCs/playbook.
