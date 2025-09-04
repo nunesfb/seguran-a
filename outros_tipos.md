@@ -27,7 +27,7 @@ Redes de dispositivos **infectados e controlados remotamente** (bots/zumbis) por
 
 ### Demos
 
-**A) “Mini-botnet” offline (impressões, sem rede)**  
+**A) “Mini-botnet” offline**  
 Salve como `botnet_sim.py`:
 ```python
 # DEMO segura: simula 5 "bots" reportando-se a um C2 fictício (sem rede).
@@ -49,8 +49,6 @@ for tick in range(6):
 print("[done] Fim da simulação.")
 ```
 
-Como narrar: padrão de beaconing e execução de “comando” centralizado — sem tráfego real.
-
 **B) Log sintético de DDoS (para caça de IoC)**
 ```
 2025-09-03T14:10:01 SRC=10.0.10.21 DST=203.0.113.50 DPT=443 BYTES=512
@@ -58,7 +56,6 @@ Como narrar: padrão de beaconing e execução de “comando” centralizado —
 2025-09-03T14:10:01 SRC=10.0.10.23 DST=203.0.113.50 DPT=443 BYTES=515
 ...
 ```
-Exercício: alunos contam fontes distintas → mesmo destino/porta em janelas curtas ⇒ padrão de ataque volumétrico.
 
 ---
 
@@ -82,7 +79,7 @@ Software/alerta enganoso que assusta o usuário (“seu PC está infectado!”) 
 - Educação: não clicar, fechar a aba/janela, limpar extensões.
 - EDR para bloquear instaladores suspeitos.
 
-### Demo (HTML inofensivo)
+### Demo 
 Salve como `scareware_demo.html`:
 ```html
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
