@@ -1,4 +1,4 @@
-# 🔹 Outros Tipos de Ameaças — Visão Didática
+# 🔹 Outros Tipos de Ameaças
 
 ---
 
@@ -25,7 +25,7 @@ Redes de dispositivos **infectados e controlados remotamente** (bots/zumbis) por
 - **EDR/IDS/IPS** com detecção de beaconing; **DNS sinkhole**/bloqueio de domínios novos.
 - **Contenção rápida** (isolar host), **rotacionar credenciais/tokens** e limpar persistências.
 
-### Demos 100% seguras (Sem Malware)
+### Demos
 
 **A) “Mini-botnet” offline (impressões, sem rede)**  
 Salve como `botnet_sim.py`:
@@ -82,7 +82,7 @@ Software/alerta enganoso que assusta o usuário (“seu PC está infectado!”) 
 - Educação: não clicar, fechar a aba/janela, limpar extensões.
 - EDR para bloquear instaladores suspeitos.
 
-### Demo segura (HTML inofensivo)
+### Demo (HTML inofensivo)
 Salve como `scareware_demo.html`:
 ```html
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
@@ -128,7 +128,7 @@ Uso indevido de CPU/GPU da vítima para minerar criptomoedas (ganho para o ataca
 - Monitoramento de performance e alerts por uso anômalo.
 - EDR para detectar mineradores e persistências.
 
-### Demo segura (HTML com botão Iniciar/Parar)
+### Demo (HTML com botão Iniciar/Parar)
 Salve como `cryptojacking_demo.html`:
 ```html
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
@@ -190,7 +190,7 @@ Ataques que não gravam arquivos no disco: operam apenas na memória, abusando d
 - Privilégios mínimos, AppLocker/WDAC, PowerShell Logging e Script Block Logging.
 - Resposta: isolar host, coletar eventos/detonadores, remover persistências e revisar credenciais.
 
-### Demos 100% seguras (Sem executar nada perigoso)
+### Demos
 
 **A) Detector didático de cmdlines suspeitas (offline)**  
 Salve como `fileless_detector_demo.py`:
@@ -213,7 +213,3 @@ for s in samples:
   print(f"[{flag}] {s}\n   ↳ regras: {hits}")
 print("\nObs.: Em EDR real, combine processo pai/filho, cmdline completa e horário.")
 ```
-
-**B) “Duas visões” (scripts em memória vs. em disco) – discussão guiada**  
-Mostre que um script pode existir só na memória (ex.: copiado/colado no console) — não faça execução de payload real.  
-Discuta como logging do PowerShell/AMSI e EDR ajudam a ver o conteúdo mesmo sem arquivo no disco.
