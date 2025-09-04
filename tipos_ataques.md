@@ -1,9 +1,5 @@
 # 🔹 Tipos de Ataques em Segurança
 
-> Objetivo: explicar **como identificar e se defender**, com **demos 100% seguras** (sem exploração, sem rede e sem persistência).
-
----
-
 ## 1) 🎣 Phishing
 **O que é:** e-mails/mensagens falsas simulando instituições.  
 **Objetivo:** roubo de credenciais/dados.
@@ -16,7 +12,7 @@
 - **Conscientização**, **MFA**, filtros anti-phishing, **DMARC/DKIM/SPF**.
 - Verificar **URL real** antes de clicar; nunca inserir senha por links recebidos.
 
-**Demo segura — “texto do link” vs URL real**  
+**Demo — “texto do link” vs URL real**  
 Salve como `phishing_link_demo.html`:
 ```html
 <!doctype html><meta charset="utf-8">
@@ -35,17 +31,11 @@ Salve como `phishing_link_demo.html`:
 **O que é:** phishing direcionado (ex.: RH/Finanças).  
 **Mitigação:** validação fora do canal (ligação, ticket), política de dupla checagem para dados sensíveis.
 
-**Exercício rápido (sem código)**  
-Monte um checklist: remetente corporativo? ticket vinculado? link aponta ao domínio oficial? confirmação por telefone interno?
-
 ---
 
 ## 3) 🐋 Whaling
 **O que é:** ataques a executivos/C-level (ex.: CEO fraud).  
 **Mitigação:** workflow de aprovação em transferências, alerta de “urgência” fora de horário, contas VIP com MFA forte e treinamento específico.
-
-**Simulação didática**  
-Peça à turma para propor um fluxo “pedido urgente do CEO” → duas validações humanas + registro em sistema.
 
 ---
 
@@ -84,17 +74,13 @@ Explique: MFA derruba a utilidade do brute force mesmo com senhas fracas.
 **Como funcionam:** interceptam/forjam tráfego; em MITM, um atacante fica “entre” cliente e servidor.  
 **Mitigação:** HTTPS/TLS em tudo, HSTS, VPN em redes não confiáveis, IDS/IPS, segmentação.
 
-**Exercício seguro (conceitual)**  
-Abra um site com cadeado e mostre detalhes do certificado (cadeia/emitente).  
-Discuta “o que observar” quando aparece alerta de certificado (nunca ignore).
-
 ---
 
 ## 7) 🌊 DoS/DDoS
 **O que é:** sobrecarga para indisponibilizar.  
 **Mitigação:** mitigação em nuvem, rate-limit, caches/CDN, auto-scaling, WAF e filtros upstream.
 
-**Demo segura — Log sintético de pico**
+**Demo — Log sintético de pico**
 ```
 2025-09-03T10:00:00 RPS=1800 SRCs=120 DST=api.exemplo
 2025-09-03T10:00:05 RPS=5200 SRCs=900  DST=api.exemplo  <-- anômalo
