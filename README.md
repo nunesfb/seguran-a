@@ -220,3 +220,261 @@ Ransomware é um tipo de malware de extorsão que **sequestra dados** via cripto
 - **Exemplo:** simulação de phishing reduz chance de ataques em 70%.  
 
 👉 **Defesa em profundidade:** camadas de segurança combinando **tecnologia, processos e pessoas**.  
+
+-------
+
+1) Phishing (didático e inofensivo)
+
+O que mostra: como uma página falsa poderia enganar alguém — sem coletar dados, sem rede, e com aviso educativo claro.
+
+Salve como phishing_demo.html e abra no navegador.
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>[DEMO DIDÁTICA] Phishing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;display:grid;place-items:center;min-height:100dvh;background:#0b1220;color:#e7eaf3}
+    .card{background:#141b2d;border:1px solid #26324a;border-radius:16px;padding:28px;max-width:360px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    h1{margin:0 0 6px;font-size:1.25rem}
+    p.badge{margin:0 0 16px;color:#9fb1d1}
+    label{display:block;margin:12px 0 6px}
+    input{width:100%;padding:10px 12px;border:1px solid #2f3d5a;border-radius:10px;background:#0f1626;color:#e7eaf3}
+    button{margin-top:16px;width:100%;padding:10px 12px;border:0;border-radius:10px;background:#4f7cff;color:#fff;font-weight:600;cursor:pointer}
+    .edu{margin-top:18px;font-size:.9rem;color:#9fb1d1}
+    .banner{position:fixed;inset:12px auto auto 12px;background:#ffbe0b;color:#1a1a1a;padding:6px 10px;border-radius:8px;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="banner">DEMONSTRAÇÃO DIDÁTICA — NÃO USE CREDENCIAIS REAIS</div>
+  <div class="card" role="region" aria-label="Formulário de demonstração">
+    <h1>Entre na sua conta</h1>
+    <p class="badge">*Exemplo educacional de página falsa*</p>
+
+    <form id="demo-form" autocomplete="off">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" placeholder="voce@exemplo.com" required />
+      <label for="pwd">Senha</label>
+      <input id="pwd" type="password" placeholder="••••••••" required />
+      <button type="submit">Entrar</button>
+    </form>
+
+    <div class="edu" id="edu" hidden></div>
+  </div>
+
+  <script>
+    document.getElementById('demo-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      // NÃO coleta, NÃO envia, só educa:
+      const msg = `
+⚠️ ESTA É UMA SIMULAÇÃO DE PHISHING.
+Nunca insira credenciais em páginas suspeitas.
+Verifique o endereço (URL/HTTPS), ortografia e remetente.
+Habilite MFA sempre que possível.`;
+      alert(msg);
+      const edu = document.getElementById('edu');
+      edu.hidden = false;
+      edu.textContent = "Dica: verifique a URL, cadeado HTTPS e suspeite de urgências/ameaças no texto.";
+      (e.target).reset();
+    });
+  </script>
+</body>
+</html>
+
+2) Adware (inofensivo — só “irritante”)
+
+O que mostra: pop-ups/banners invasivos dentro da própria página (sem persistência, sem instalar nada).
+
+Salve como adware_demo.html.
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>[DEMO DIDÁTICA] Adware</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{--bg:#0e0f13;--fg:#e9ecf1;--muted:#a8b0bf;--accent:#ff4757}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    header{padding:20px;border-bottom:1px solid #232631}
+    main{padding:24px;max-width:900px;margin:0 auto}
+    button{border:0;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .banner{position:fixed;left:12px;bottom:12px;background:#ffeaa7;color:#111;padding:10px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+    .ad{position:fixed;background:#1b1e2a;border:1px solid #30364a;color:#e9ecf1;border-radius:14px;box-shadow:0 16px 42px rgba(0,0,0,.5);width:280px;padding:14px}
+    .ad h3{margin:0 0 6px}
+    .muted{color:var(--muted)}
+    .close{float:right;background:var(--accent);color:#fff;border-radius:8px;padding:4px 8px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DEMO: Comportamento “Adware” (inofensivo)</h1>
+    <p class="muted">Gera banners irritantes e overlays — <strong>apenas nesta página</strong>.</p>
+  </header>
+
+  <main>
+    <div class="row">
+      <button id="spawn">Gerar anúncio</button>
+      <button id="spawnMany">Gerar vários</button>
+      <button id="clearAll">Remover todos</button>
+      <button id="toggleHome">Alterar “página inicial” (falso)</button>
+    </div>
+    <p style="margin-top:18px;color:var(--muted)">Isto é apenas uma simulação didática — não altera configurações reais.</p>
+  </main>
+
+  <div class="banner" id="banner" hidden>
+    “Sua página inicial foi alterada!” (mentira típica de adware) — <button id="undo">Desfazer</button>
+  </div>
+
+  <script>
+    let count = 0;
+    function createAd(x=20,y=80){
+      const ad = document.createElement('div');
+      ad.className = 'ad';
+      ad.style.left = (x + Math.random()*40) + 'px';
+      ad.style.top  = (y + Math.random()*40) + 'px';
+      ad.style.zIndex = 1000 + count++;
+      ad.innerHTML = `
+        <button class="close" aria-label="Fechar">x</button>
+        <h3>Promoção Imperdível!</h3>
+        <p class="muted">Clique aqui! Clique aqui! Clique aqui!</p>
+      `;
+      ad.querySelector('.close').onclick = () => ad.remove();
+      ad.onmousedown = (e) => { // arrastar
+        const dx = e.clientX - ad.offsetLeft;
+        const dy = e.clientY - ad.offsetTop;
+        function move(ev){ad.style.left=(ev.clientX-dx)+'px';ad.style.top=(ev.clientY-dy)+'px';}
+        function up(){window.removeEventListener('mousemove',move);window.removeEventListener('mouseup',up);}
+        window.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
+      };
+      document.body.appendChild(ad);
+    }
+    document.getElementById('spawn').onclick = ()=> createAd(40,120);
+    document.getElementById('spawnMany').onclick = ()=> { for(let i=0;i<4;i++) createAd(60+i*40,140+i*30); };
+    document.getElementById('clearAll').onclick = ()=> document.querySelectorAll('.ad').forEach(e=>e.remove());
+    document.getElementById('toggleHome').onclick = ()=> document.getElementById('banner').hidden = false;
+    document.getElementById('undo').onclick = ()=> document.getElementById('banner').hidden = true;
+  </script>
+</body>
+</html>
+
+3) Scareware (mensagem enganosa, mas educativa)
+
+O que mostra: uma “tela de pânico” que tenta obrigar o clique — no nosso caso, leva a uma explicação.
+
+Salve como scareware_demo.html.
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>[DEMO DIDÁTICA] Scareware</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{margin:0;background:#0f0f10;color:#e9ecef;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    .full{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at center,#1d1f2a 0%,#0f0f10 60%)}
+    .panel{max-width:560px;background:#1e2233;border:1px solid #2f3650;padding:28px;border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.5)}
+    h1{margin:0 0 8px}
+    .warn{color:#ff6b6b;font-weight:700}
+    .muted{color:#aeb6c8}
+    .btn{margin-top:16px;display:inline-block;background:#ff4757;color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="full">
+    <div class="panel" role="alertdialog" aria-label="Alerta falso">
+      <h1 class="warn">⚠️ SEU COMPUTADOR ESTÁ INFECTADO!</h1>
+      <p class="muted">Clique no botão para “remover todos os vírus imediatamente”.</p>
+      <div class="btn" id="fix">Remover agora</div>
+      <p id="edu" class="muted" style="margin-top:18px;display:none"></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('fix').onclick = () => {
+      const edu = document.getElementById('edu');
+      edu.style.display = 'block';
+      edu.textContent =
+        "Isto é uma demonstração de scareware. Dicas: desconfie de urgências, " +
+        "erros de gramática, pop-ups agressivos e pedidos de pagamento. Feche a aba e use um antivírus legítimo.";
+      alert("DEMO: Nunca pague por 'limpezas' que surgem do nada.");
+    };
+  </script>
+</body>
+</html>
+
+7) Cryptojacking (simulação leve, com botão de parar)
+
+O que mostra: como um script pode “comer CPU” — sem minerar e com botão de parar.
+
+Salve como cryptojacking_demo.html.
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>[DEMO DIDÁTICA] Cryptojacking (simulado)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#0c111b;color:#e7ebf3;display:grid;place-items:center;min-height:100dvh}
+    .card{background:#141a2b;border:1px solid #26324a;border-radius:16px;padding:28px;max-width:540px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+    .start{background:#4f7cff;color:#fff}
+    .stop{background:#ff5d5d;color:#fff}
+    .muted{color:#9fb1d1}
+    progress{width:100%}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Simulação de uso excessivo de CPU</h1>
+    <p class="muted">Demonstra como scripts maliciosos podem consumir recursos.</p>
+    <div style="display:flex;gap:10px;margin:12px 0">
+      <button class="start" id="start">Iniciar “mineração” (falsa)</button>
+      <button class="stop" id="stop" disabled>Parar</button>
+    </div>
+    <p>Operações por segundo (estimado): <strong id="ops">0</strong></p>
+    <progress id="load" max="100" value="0"></progress>
+    <p class="muted" style="margin-top:10px">Use o Gerenciador de Tarefas/Monitor de Atividade para observar a CPU.</p>
+  </div>
+
+  <script>
+    let running = false, rafId = null;
+    function fakeHash(n){
+      // Alguma carga CPU: operações matemáticas inúteis
+      let x = 0;
+      for(let i=0;i<n;i++){ x = (x * 1664525 + 1013904223) >>> 0; }
+      return x;
+    }
+    function loop(){
+      if(!running) return;
+      const start = performance.now();
+      let ops = 0;
+      while (performance.now() - start < 200) { // ~200ms de trabalho
+        fakeHash(5000); ops++;
+      }
+      document.getElementById('ops').textContent = String(ops);
+      document.getElementById('load').value = Math.min(100, 20 + ops);
+      rafId = requestAnimationFrame(loop);
+    }
+    document.getElementById('start').onclick = () => {
+      running = true;
+      document.getElementById('start').disabled = true;
+      document.getElementById('stop').disabled = false;
+      loop();
+    };
+    document.getElementById('stop').onclick = () => {
+      running = false;
+      if (rafId) cancelAnimationFrame(rafId);
+      document.getElementById('start').disabled = false;
+      document.getElementById('stop').disabled = true;
+      document.getElementById('ops').textContent = "0";
+      document.getElementById('load').value = 0;
+    };
+  </script>
+</body>
+</html>
+
