@@ -1,4 +1,4 @@
-# 🔹 Tipos de Ataques em Segurança — Visão Didática
+# 🔹 Tipos de Ataques em Segurança
 
 > Objetivo: explicar **como identificar e se defender**, com **demos 100% seguras** (sem exploração, sem rede e sem persistência).
 
@@ -151,11 +151,6 @@ Salve como `xss_safe_demo.html`:
 **O que é:** falha desconhecida/sem correção disponível.  
 **Mitigação:** monitoramento comportamental (EDR/XDR), segmentação de ativos críticos, princípio do menor privilégio, bug bounty e defesa em profundidade.
 
-**Exercício (tabletop, sem código)**  
-“Se amanhã surgir um zero-day crítico no seu gateway SSO, qual o plano?”  
-- Limitar exposição? Regras compensatórias/WAF?  
-- MFA reforçado?  
-- Comunicado interno e telemetria ampliada?
 
 -----
 
