@@ -30,7 +30,7 @@ Ele se diferencia de softwares legítimos porque é intencionalmente projetado p
 - Um pen drive infectado que instala um worm automaticamente.  
 - Um aplicativo falso na loja de apps que funciona como adware ou keylogger.  
 
-👉 **Em resumo:** todo vírus é um malware, mas nem todo malware é um vírus.  
+**Em resumo:** todo vírus é um malware, mas nem todo malware é um vírus.  
 O termo **malware** é o “guarda-chuva” que engloba **vírus, worms, trojans, ransomware, spyware, adware, rootkits, keyloggers, backdoors**, entre outros.  
 
 ---
@@ -577,3 +577,247 @@ Você mostra exatamente o que quer (dados protegidos por senha e recuperação) 
 Ferramentas como 7-Zip/OpenSSL são comuns, auditadas e seguras para demonstração.
 
 O mini-lab Python foca no conceito cripto (o que importa em aula quando se fala de ransomware).
+
+----------
+
+✅ Keylogger – Laboratório seguro (didático, sem risco)
+Como funciona este lab
+
+Só funciona dentro da própria página e apenas quando você clica em “Iniciar demo” e marca um checkbox de consentimento.
+
+Ele não registra os caracteres reais; em vez disso, anonimiza:
+
+Letras → L, dígitos → N, espaço → ␣, enter → ↵, backspace → ⌫, outros → •.
+
+Nada é salvo em disco ou enviado para a rede.
+
+1) “Keylogger” anonimizado (em um <textarea> controlado)
+
+Salve como keylogger_demo_anon.html e abra no navegador.
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>[DEMO DIDÁTICA] Keylogger ANONIMIZADO (seguro)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{--bg:#0c111b;--fg:#e7ebf3;--muted:#9fb1d1;--card:#141a2b;--bord:#26324a;--accent:#4f7cff;--danger:#ff5d5d}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;display:grid;place-items:center;min-height:100dvh}
+    .card{background:var(--card);border:1px solid var(--bord);border-radius:16px;padding:24px;max-width:820px;width:clamp(320px,90vw,820px);box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    h1{margin:0 0 8px}
+    p.muted{color:var(--muted);margin:0 0 16px}
+    textarea{width:100%;min-height:120px;border-radius:12px;border:1px solid var(--bord);background:#0f1524;color:var(--fg);padding:12px}
+    .row{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+    button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+    .start{background:var(--accent);color:#fff}
+    .stop{background:var(--danger);color:#fff}
+    .ghost{background:transparent;border:1px solid var(--bord);color:var(--fg)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+    .box{border:1px solid var(--bord);border-radius:12px;padding:12px;background:#10172b}
+    code{background:#0b1120;border:1px solid #1e293b;padding:2px 6px;border-radius:6px}
+    .consent{display:flex;gap:8px;align-items:center;margin-top:6px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>DEMO segura de “keylogger” (anonimizado)</h1>
+    <p class="muted">Interceta <em>apenas</em> as teclas dentro do campo abaixo, <strong>sem</strong> registrar caracteres reais e <strong>sem rede</strong>.</p>
+
+    <label for="pad">Área de teste (digite aqui):</label>
+    <textarea id="pad" placeholder="Digite aqui para ver a captura ANONIMIZADA..." disabled></textarea>
+
+    <div class="consent">
+      <input type="checkbox" id="ok" />
+      <label for="ok">Autorizo a captura <strong>apenas neste campo</strong> e de forma <strong>anonimizada</strong>.</label>
+    </div>
+
+    <div class="row">
+      <button id="start" class="start" disabled>Iniciar demo</button>
+      <button id="stop" class="stop" disabled>Parar</button>
+      <button id="reset" class="ghost">Limpar métricas</button>
+    </div>
+
+    <div class="grid">
+      <div class="box">
+        <h3 style="margin:0 0 8px">Últimas teclas (anonimizadas)</h3>
+        <div id="stream" style="font-size:1.1rem;word-wrap:break-word;min-height:24px"></div>
+      </div>
+      <div class="box">
+        <h3 style="margin:0 0 8px">Métricas</h3>
+        <div id="stats" class="muted">
+          Total: <code>0</code> • Letras(L): <code>0</code> • Dígitos(N): <code>0</code> • Espaços(␣): <code>0</code> • Enter(↵): <code>0</code> • Backspace(⌫): <code>0</code> • Outros(•): <code>0</code><br/>
+          Tempo médio entre teclas: <code>–</code> ms
+        </div>
+      </div>
+    </div>
+
+    <p class="muted" style="margin-top:12px">
+      🔎 Objetivo didático: mostrar que <code>addEventListener('keydown')</code> consegue observar o ato de digitar. Em ataques reais,
+      o script malicioso <em>exfiltra</em> as teclas — aqui isso <strong>não ocorre</strong> (sem rede).
+    </p>
+  </div>
+
+  <script>
+    const pad = document.getElementById('pad');
+    const ok = document.getElementById('ok');
+    const startBtn = document.getElementById('start');
+    const stopBtn = document.getElementById('stop');
+    const resetBtn = document.getElementById('reset');
+    const stream = document.getElementById('stream');
+    const stats = document.getElementById('stats');
+
+    let enabled = false;
+    let counters = { total:0, L:0, N:0, SP:0, EN:0, BK:0, O:0 };
+    let lastTs = null, intervals = [];
+
+    function classifica(e){
+      if(e.key === ' ') return '␣';
+      if(e.key === 'Enter') return '↵';
+      if(e.key === 'Backspace') return '⌫';
+      if(/^[a-zA-Z]$/.test(e.key)) return 'L';
+      if(/^[0-9]$/.test(e.key)) return 'N';
+      return '•';
+    }
+
+    function onKeydown(e){
+      if(!enabled) return;
+      const cat = classifica(e);
+      counters.total++;
+      if(cat==='L') counters.L++;
+      else if(cat==='N') counters.N++;
+      else if(cat==='␣') counters.SP++;
+      else if(cat==='↵') counters.EN++;
+      else if(cat==='⌫') counters.BK++;
+      else counters.O++;
+
+      // fluxo anonimizado (últimos 80 símbolos)
+      stream.textContent = (stream.textContent + cat).slice(-80);
+
+      const now = performance.now();
+      if(lastTs !== null) intervals.push(now - lastTs);
+      lastTs = now;
+
+      const avg = intervals.length ? (intervals.reduce((a,b)=>a+b,0)/intervals.length).toFixed(1) : '–';
+      stats.innerHTML = `Total: <code>${counters.total}</code> • Letras(L): <code>${counters.L}</code> • Dígitos(N): <code>${counters.N}</code> • Espaços(␣): <code>${counters.SP}</code> • Enter(↵): <code>${counters.EN}</code> • Backspace(⌫): <code>${counters.BK}</code> • Outros(•): <code>${counters.O}</code><br/>Tempo médio entre teclas: <code>${avg}</code> ms`;
+    }
+
+    function start(){
+      if(!ok.checked) { alert('Marque o consentimento para iniciar.'); return; }
+      enabled = true;
+      pad.disabled = false;
+      pad.focus();
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      window.addEventListener('keydown', onKeydown, { capture:true });
+    }
+    function stop(){
+      enabled = false;
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      window.removeEventListener('keydown', onKeydown, { capture:true });
+    }
+    function reset(){
+      counters = { total:0, L:0, N:0, SP:0, EN:0, BK:0, O:0 };
+      intervals = []; lastTs = null; stream.textContent = '';
+      stats.innerHTML = `Total: <code>0</code> • Letras(L): <code>0</code> • Dígitos(N): <code>0</code> • Espaços(␣): <code>0</code> • Enter(↵): <code>0</code> • Backspace(⌫): <code>0</code> • Outros(•): <code>0</code><br/>Tempo médio entre teclas: <code>–</code> ms`;
+    }
+
+    ok.addEventListener('change', ()=> startBtn.disabled = !ok.checked);
+    startBtn.addEventListener('click', start);
+    stopBtn.addEventListener('click', stop);
+    resetBtn.addEventListener('click', reset);
+  </script>
+</body>
+</html>
+
+
+O que mostrar em aula
+
+Explique que um script pode observar eventos no DOM.
+
+Reforce que o demo não guarda caracteres, só categorias e tempos.
+
+Mostre por que MFA reduz impacto e por que extensões e scripts de terceiros devem ser controlados.
+
+2) Interceptação de formulário (seguro, sem caracteres)
+
+Mostra que um script poderia observar a digitação antes do envio, mas aqui somente registra comprimento e tempo de digitação — nunca os caracteres.
+
+Salve como form_intercept_demo.html.
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>[DEMO] Interceptação de formulário (sem capturar texto)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#0b1220;color:#e7eaf3;display:grid;place-items:center;min-height:100dvh;margin:0}
+    .card{background:#141b2d;border:1px solid #26324a;border-radius:16px;padding:24px;max-width:560px;width:clamp(320px,90vw,560px);box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    input{width:100%;padding:10px 12px;border:1px solid #2f3d5a;border-radius:10px;background:#0f1626;color:#e7eaf3}
+    label{display:block;margin:12px 0 6px}
+    button{margin-top:14px;width:100%;padding:10px 12px;border:0;border-radius:10px;background:#4f7cff;color:#fff;font-weight:700;cursor:pointer}
+    .muted{color:#9fb1d1}
+    .box{border:1px solid #2f3d5a;border-radius:10px;padding:10px;margin-top:10px;background:#10172b}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Interceptação de Formulário (DEMO segura)</h1>
+    <p class="muted">Mostra comprimento e tempos — <strong>nunca</strong> os caracteres.</p>
+    <form id="f" autocomplete="off">
+      <label for="u">Usuário</label>
+      <input id="u" name="u" placeholder="ex.: joao" required />
+      <label for="p">Senha</label>
+      <input id="p" name="p" type="password" placeholder="••••••••" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <div class="box" id="log" aria-live="polite"></div>
+  </div>
+
+  <script>
+    const f = document.getElementById('f');
+    const u = document.getElementById('u');
+    const p = document.getElementById('p');
+    const log = document.getElementById('log');
+    let startU=null, startP=null;
+
+    function now(){return performance.now();}
+    function write(msg){log.innerHTML += msg + "<br/>";}
+
+    u.addEventListener('input', e=>{
+      if(startU===null) startU = now();
+      write(`Usuário: comprimento=${u.value.length}`);
+    });
+    p.addEventListener('input', e=>{
+      if(startP===null) startP = now();
+      write(`Senha: comprimento=${p.value.length} (não capturamos o conteúdo)`);
+    });
+
+    f.addEventListener('submit', e=>{
+      e.preventDefault();
+      const tU = startU? (now()-startU).toFixed(0)+' ms' : '–';
+      const tP = startP? (now()-startP).toFixed(0)+' ms' : '–';
+      alert(
+        "DEMO educativa:\n" +
+        "- Scripts podem observar eventos antes do envio.\n" +
+        "- Aqui, só mostramos comprimentos e tempos (sem conteúdo).\n" +
+        `- Tempo digitação Usuário: ${tU}\n` +
+        `- Tempo digitação Senha: ${tP}\n\n` +
+        "Boas práticas: MFA, CSP, limitar scripts de terceiros, revisar extensões."
+      );
+      log.innerHTML = "";
+      f.reset(); startU = startP = null;
+    });
+  </script>
+</body>
+</html>
+
+Dicas de condução (defensivo)
+
+Explique limites do demo: não é global, não persiste, não envia.
+
+Mostre como extensões e scripts externos podem abusar do mesmo mecanismo → política de extensões, CSP e verificação de integridade de scripts (SRI).
+
+Reforce MFA, EDR/anti-tamper, e revisão de permissões (acessibilidade, teclado, leitura de tela).
