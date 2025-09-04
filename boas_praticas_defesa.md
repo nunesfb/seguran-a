@@ -1,4 +1,4 @@
-# 🔹 Boas Práticas de Defesa — Guia Didático
+# 🔹 Boas Práticas de Defesa
 
 > Objetivo: consolidar medidas **preventivas e reativas** com exemplos e **laboratórios 100% seguros** para treinamento.
 
@@ -63,7 +63,7 @@
 
 ---
 
-# 🧪 Laboratórios Didáticos (100% Seguros)
+# 🧪 Laboratórios Didáticos
 
 > Projetados **sem rede**, **sem persistência** e **sem coletar dados reais** — focados em **conscientização e defesa**.
 
@@ -353,21 +353,4 @@ if __name__ == "__main__":
 **Mostra:** captura de eventos no DOM sem registrar caracteres reais.  
 Salve como `keylogger_demo_anon.html`: *(versão resumida — igual à anterior que você já usa)*
 
-✔️ Relembrar em aula: **MFA**, políticas de extensões e **CSP/SRI** mitigam esse vetor.
-
 ---
-
-## 8) Interceptação de Formulário (sem caracteres)
-**Mostra:** comprimento e tempos de digitação; nunca o texto.  
-Salve como `form_intercept_demo.html`: *(versão resumida — igual à anterior que você já usa)*
-
----
-
-## ✅ Checklist Rápido para Aula & Operação
-- **Patching & Inventário:** métricas de SLA por criticidade; janelas regulares.  
-- **EDR/XDR + SIEM:** regras para ransom notes, explosão de I/O, PS encodado, domínios novos.  
-- **Backups 3–2–1:** testes de restauração (RTO/RPO).  
-- **MFA em tudo crítico:** SSO/VPN/RDP/Admin.  
-- **Políticas de navegador:** bloqueio de extensões não aprovadas, CSP/SRI.  
-- **Treinamento contínuo:** phishing, engenharia social, reporte rápido.  
-- **Playbooks de resposta (tabletop):** isolar, preservar, erradicar, recuperar, revisar.
