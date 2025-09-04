@@ -1,9 +1,5 @@
 # 🔹 Boas Práticas de Defesa
 
-> Objetivo: consolidar medidas **preventivas e reativas** com exemplos e **laboratórios 100% seguros** para treinamento.
-
----
-
 ## 1) 🔄 Atualizações e Patches Regulares
 **Por que:** fecham **falhas conhecidas** exploradas por ataques amplos.  
 **Como aplicar (essencial):**
@@ -46,7 +42,6 @@
 **Como aplicar:**
 - **SIEM** com regras (ex.: surto de renomeações, domínios recém-registrados, PS encodado).
 - **SOC/CSIRT** com **playbooks** (isolar, preservar artefatos, erradicar, recuperar, revisar).
-- Exercícios **tabletop** e pós-incidente com **lições aprendidas**.
 
 ---
 
@@ -65,11 +60,7 @@
 
 # 🧪 Laboratórios Didáticos
 
-> Projetados **sem rede**, **sem persistência** e **sem coletar dados reais** — focados em **conscientização e defesa**.
-
----
-
-## 1) Phishing (página falsa **educativa**)
+## 1) Phishing (página falsa)
 **Mostra:** como texto do link difere da **URL real**; sem coletar/enviar credenciais.  
 **Salve como `phishing_demo.html` e abra no navegador:**
 ```html
@@ -127,7 +118,7 @@ Habilite MFA sempre que possível.`);
 
 ---
 
-## 2) Adware (banners inofensivos, sem persistência)
+## 2) Adware
 **Mostra:** pop-ups/overlays como adware faria (só dentro da página).  
 **Salve como `adware_demo.html`:**
 ```html
@@ -205,7 +196,7 @@ Habilite MFA sempre que possível.`);
 
 ---
 
-## 3) Scareware (alerta falso educativo)
+## 3) Scareware
 **Mostra:** como mensagens de pânico tentam forçar cliques/pagamentos.  
 **Salve como `scareware_demo.html`:**
 ```html
@@ -294,7 +285,7 @@ Habilite MFA sempre que possível.`);
 
 ---
 
-## 5) Pasta “protegida por senha” (OpenSSL) — sem código malicioso
+## 5) Pasta “protegida por senha” (OpenSSL)
 **Mostra:** confidencialidade e reversibilidade com senha, como numa restauração após incidente.
 ```bash
 # 1) Empacotar a pasta em .tar
@@ -349,8 +340,7 @@ if __name__ == "__main__":
 
 ---
 
-## 7) Keylogger anonimizado (somente nesta página, sem rede)
+## 7) Keylogger anonimizado
 **Mostra:** captura de eventos no DOM sem registrar caracteres reais.  
-Salve como `keylogger_demo_anon.html`: *(versão resumida — igual à anterior que você já usa)*
 
 ---
