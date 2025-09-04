@@ -478,3 +478,102 @@ Salve como cryptojacking_demo.html.
 </body>
 </html>
 
+-------------
+
+✅ Opção B — Pasta “protegida por senha” com OpenSSL (sem código)
+
+Mesma ideia, usando tar + OpenSSL (claro e auditável).
+
+# 1) Empacotar a pasta em um .tar
+tar -cvf LAB_SEGURO.tar LAB_SEGURO
+
+# 2) Criptografar o .tar (AES-256-CBC com PBKDF2 e muitas iterações)
+openssl enc -aes-256-cbc -salt -pbkdf2 -iter 250000 -in LAB_SEGURO.tar -out LAB_SEGURO.enc
+
+# 3) (Opcional) Validar que o .tar original continua lá e NADA foi destruído
+
+# 4) Descriptografar depois
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 250000 -in LAB_SEGURO.enc -out RECUPERADO.tar
+
+# 5) Extrair o conteúdo recuperado
+mkdir -p RECUPERADO && tar -xvf RECUPERADO.tar -C RECUPERADO
+
+
+Você prova confidencialidade com senha, e também prova reversibilidade (a essência que você quer demonstrar em aulas sobre ransomware, sem criar malware).
+
+✅ Opção C — Mini-lab de criptografia em memória (Python, AES-GCM)
+
+Cifra/decifra apenas texto na RAM (sem ler/gravar arquivos). Mostra sal, nonce, PBKDF2 e AEAD.
+
+Instale a dependência:
+
+pip install cryptography
+
+
+Salve como crypto_lab_memoria.py e execute:
+
+import os, json, base64
+from typing import Tuple
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+def b64e(b: bytes) -> str: return base64.b64encode(b).decode("utf-8")
+def b64d(s: str) -> bytes: return base64.b64decode(s.encode("utf-8"))
+
+def derivar_chave(senha: str, sal: bytes) -> bytes:
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=sal,
+        iterations=300_000,
+    )
+    return kdf.derive(senha.encode())
+
+def cifrar_texto(plaintext: str, senha: str) -> str:
+    sal = os.urandom(16)      # protege contra ataques de tabela
+    chave = derivar_chave(senha, sal)
+    aesgcm = AESGCM(chave)
+    nonce = os.urandom(12)    # necessário para AES-GCM (único por mensagem)
+    ct = aesgcm.encrypt(nonce, plaintext.encode(), None)
+    pacote = {"salt": b64e(sal), "nonce": b64e(nonce), "ct": b64e(ct)}
+    return json.dumps(pacote, indent=2, ensure_ascii=False)
+
+def decifrar_texto(pacote_json: str, senha: str) -> str:
+    d = json.loads(pacote_json)
+    sal, nonce, ct = b64d(d["salt"]), b64d(d["nonce"]), b64d(d["ct"])
+    chave = derivar_chave(senha, sal)
+    aesgcm = AESGCM(chave)
+    plaintext = aesgcm.decrypt(nonce, ct, None)
+    return plaintext.decode()
+
+if __name__ == "__main__":
+    senha = "SenhaDidatica123!"
+    texto = "Este é o conteúdo do arquivo EXEMPLO.TXT (simulado em memória)."
+
+    print(">>> CIFRANDO em memória...")
+    pacote = cifrar_texto(texto, senha)
+    print(pacote)
+
+    print("\n>>> DECIFRANDO em memória...")
+    recuperado = decifrar_texto(pacote, senha)
+    print(recuperado)
+
+
+O que você ensina com isso (sem tocar em disco):
+
+PBKDF2 + sal (derivação de chave a partir de senha).
+
+AES-GCM (criptografia autenticada: confidencialidade + integridade).
+
+Nonce único por mensagem.
+
+Reversibilidade controlada pela senha.
+
+Por que seguir assim?
+
+Você mostra exatamente o que quer (dados protegidos por senha e recuperação) sem criar ou distribuir código que possa ser adaptado para malícia.
+
+Ferramentas como 7-Zip/OpenSSL são comuns, auditadas e seguras para demonstração.
+
+O mini-lab Python foca no conceito cripto (o que importa em aula quando se fala de ransomware).
