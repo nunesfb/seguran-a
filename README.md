@@ -1,7 +1,8 @@
 # 🔹 O que é Malware?
 
 **Malware** vem do termo *"Malicious Software"* (software malicioso).  
-👉 É qualquer programa, código ou arquivo criado com o objetivo de **danificar sistemas, roubar informações, comprometer a privacidade, extorquir valores ou causar indisponibilidade de serviços**.  
+
+É qualquer programa, código ou arquivo criado com o objetivo de **danificar sistemas, roubar informações, comprometer a privacidade, extorquir valores ou causar indisponibilidade de serviços**.  
 
 Ele se diferencia de softwares legítimos porque é intencionalmente projetado para causar prejuízo ou obter vantagem ilícita sobre o usuário ou a organização.  
 
@@ -35,13 +36,133 @@ O termo **malware** é o “guarda-chuva” que engloba **vírus, worms, trojans
 
 ---
 
-# 🔹 Malware e suas Categorias
+# 🦠 Vírus — Visão Didática
 
-## Vírus
-- **O que é/como funciona:** precisa de um hospedeiro (arquivo, setor de boot, macro) para se replicar. Variantes: *file infector*, *macro vírus*, *boot sector*, *polimórfico/metamórfico*.  
-- **Vetores comuns:** anexos de e-mail com macros, cracks, mídias removíveis com *autorun*.  
-- **IoCs:** arquivos alterados, macros inesperadas, chaves de inicialização suspeitas.  
-- **Mitigação/Resposta:** desabilitar macros, antivírus com heurística, varredura em *Safe Mode*, backups limpos.  
+## O que é
+Um vírus é um tipo de malware que precisa de um hospedeiro (arquivo, setor de boot ou documento com macro) para replicar-se.  
+Ele executa quando o hospedeiro é aberto/executado, tenta infectar outros alvos e, opcionalmente, executa um payload (desde mensagem trivial até sabotagem).
+
+---
+
+## Ciclo de Vida (Conceitual)
+
+- **Execução inicial**: o código é acionado junto do arquivo hospedeiro (ex.: usuário abre o arquivo).  
+- **Infecção/replicação**: procura outros alvos compatíveis (arquivos do mesmo formato, documentos, etc.) e injeta uma cópia modificada de si.  
+- **Persistência & evasão**: tenta permanecer ativo (chaves de inicialização, tarefas agendadas) e esconder-se (empacotadores, técnicas polimórficas/metamórficas).  
+- **Ativação do payload**: com base em um gatilho (data, contagem de execuções, presença de internet), realiza ações planejadas.  
+- **Propagação indireta**: a cópia “viaja” quando o arquivo infectado é compartilhado (e-mail, USB, rede, nuvem).
+
+---
+
+## Principais Variantes (Alto Nível)
+
+- **File infector**: injeta código em executáveis/documentos.  
+- **Macro vírus**: usa macros (ex.: Office) contidas em documentos.  
+- **Boot/MBR**: altera componentes de inicialização do sistema.  
+- **Polimórfico/Metamórfico**: muda sua “forma” a cada cópia para dificultar assinaturas.  
+  - Polimórfico: cifra/embaralha.  
+  - Metamórfico: reescreve partes do próprio código.
+
+---
+
+## Canais de Entrada Mais Comuns
+
+- **Engenharia social**: anexos e links de phishing, “atualizadores” e cracks.  
+- **Mídia removível**: USBs e imagens ISO trocadas entre máquinas.  
+- **Superfícies expostas**: serviços desatualizados, permissões frouxas, macros habilitadas por padrão.
+
+---
+
+## Linguagens (Contexto Neutro)
+
+Malwares já foram observados em diversas linguagens de propósito geral (C/C++, C#, Go, Rust, Python) e scripting (VBScript, JavaScript/macros).  
+**Ponto didático**: não é a linguagem que “faz o vírus”, e sim o comportamento (replicar-se via hospedeiro + executar payload).
+
+---
+
+## IoCs (Indicadores de Comprometimento)
+
+- Arquivos alterados (tamanho/hash divergentes).  
+- Macros inesperadas em documentos.  
+- Chaves de inicialização/tarefas desconhecidas.  
+- Alertas heurísticos do antimalware; travamentos ao abrir certos arquivos.
+
+---
+
+## Mitigação & Resposta
+
+- Desabilitar macros por padrão; somente assinar e habilitar quando necessário.  
+- Antimalware/EDR com heurística e bloqueio comportamental.  
+- Varredura em **Modo Seguro** e restauração a partir de backups limpos (regra 3-2-1).  
+- Allowlisting (AppLocker/WDAC) e bloqueio de autorun em mídias.  
+- Treinamento contra phishing/engenharia social.
+
+---
+
+## Demos 100% Seguras para Sala (Sem Malware)
+
+Objetivo: **mostrar conceitos** (replicação, detecção, confidencialidade) **sem criar algo perigoso**.
+
+### 1) Integridade de arquivos com hash (SHA-256)
+Demonstra que pequenas mudanças no arquivo geram hash totalmente diferente.  
+Exemplo em PowerShell:
+
+```powershell
+"Olá, mundo!" | Out-File -Encoding utf8 exemplo.txt
+Get-FileHash .\exemplo.txt -Algorithm SHA256
+"Linha adicionada." | Add-Content .\exemplo.txt
+Get-FileHash .\exemplo.txt -Algorithm SHA256
+```
+
+---
+
+### 2) EICAR – teste seguro de antivírus
+Arquivo benigno que dispara o antivírus de propósito.
+
+```text
+X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+```
+
+Salve como `eicar.txt`. Seu antivírus deve sinalizar.  
+⚠️ **Cuidados**: não enviar por e-mail/nuvem institucional.
+
+---
+
+### 3) Mini-lab de Criptografia em Memória (AES-GCM)
+Exemplo em Python com `cryptography`:
+
+```python
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+# Exemplo seguro que cifra/decifra apenas texto em memória
+```
+
+Mostra: sal + PBKDF2 + nonce + AEAD → confidencialidade e integridade.
+
+---
+
+### 4) Macro Segura (Somente com Clique)
+Exemplo simples em Excel/Word:
+
+```vba
+Sub ExibirAvisoDidatico()
+    MsgBox "DEMO segura: macros podem executar ações quando o usuário clica." & vbCrLf & _
+           "Em ambiente real, mantenha macros desabilitadas por padrão.", vbInformation, "DEMO Macro"
+End Sub
+```
+
+---
+
+### 5) Pasta com Senha (7-Zip)
+Demonstra proteção de dados sem risco:
+
+```bash
+7z a -t7z LAB_ENCRIPTADO.7z ./LAB_SEGURO/* -pSenhaDidatica123! -mhe=on
+```
+
+- `-p`: senha  
+- `-mhe=on`: oculta até os nomes dos arquivos
+
+---
 
 ## Worms
 - **O que é/como funciona:** se auto-propaga explorando falhas de rede, sem interação do usuário.  
