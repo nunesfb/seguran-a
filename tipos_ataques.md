@@ -156,3 +156,7 @@ Salve como `xss_safe_demo.html`:
 - Limitar exposição? Regras compensatórias/WAF?  
 - MFA reforçado?  
 - Comunicado interno e telemetria ampliada?
+
+-----
+
+
